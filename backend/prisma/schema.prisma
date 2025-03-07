@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// the Prisma schema defines the structure of db tables
+// returns JS/TS objects that match the schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String   @id @default(uuid())  // primary key, generates unique uuid when new user is created
+  firstName  String
+  lastName   String
+  username   String   @unique   // this value must be unique in the db table; inherently creates index for faster search
+  password   String
+  bio        String?  // ? means optional
+  city       String?
+  state      String?
+  comments   Comment[]
+  hauls      Haul[]   // [] means array of values, so in this case, array of hauls
+}
+
+model Haul {
+  id            String      @id @default(uuid())
+  date          DateTime    @default(now())
+  storeName     String      
+  slug          String      @unique // URL-friendly identifier
+  notes         String?     
+  images        String[]    // array of image URLs from Supabase Storage
+  user          User        @relation(fields: [userId], references: [id])
+  userId        String
+  items         Item[]
+  comments      Comment[]
+}
+
+model Item {           // each item is specific to a haul, not a global list of items
+  id          String   @id @default(uuid())
+  haul        Haul     @relation(fields: [haulId], references: [id])
+  haulId      String
+  name        String
+  quantity    Int      @default(1)
+  price       Decimal? 
+  recommended Boolean  @default(false)
+  onSale      Boolean  @default(false)
+  
+  @@index([name])      // index on name means faster search queries for items by name
+}
+
+model Comment {
+  id        String    @id @default(uuid())
+  text      String
+  timestamp DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id])
+  userId    String
+  parentId  String?   @unique  // comment is either a top-level comment or a reply
+  parent    Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  replies   Comment[] @relation("CommentReplies")
+  haul      Haul      @relation(fields: [haulId], references: [id])
+  haulId    String
+}

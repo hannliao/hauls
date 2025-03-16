@@ -1,4 +1,4 @@
-import { useReducer, useContext, useState } from 'react';
+import { useReducer, useContext, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { createHaul } from '../api/hauls';
 import { HaulContext } from '../contexts/HaulContext';
@@ -50,11 +50,29 @@ const haulReducer = (state: HaulState, action: HaulAction): HaulState => {
 
 const NewHaulForm = () => {
   const [state, dispatch] = useReducer(haulReducer, initialState);
+  const [newItem, setNewItem] = useState({ name: '', quantity: 1, price: '', recommended: false, onSale: false });
+  const navigate = useNavigate();
   const { dateOfPurchase, storeName, items, notes, images, errors } = state;
   const { hauls, setHauls } = useContext(HaulContext);
-  const [newItem, setNewItem] = useState({ name: '', quantity: 1, price: '', recommended: false, onSale: false });
-  const { user } = useContext(UserContext) ?? {};
-  const navigate = useNavigate();
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error('No user context')
+  }
+  const { user, loading } = context;
+
+  useEffect(() => {
+    if (!loading && !user) {
+        navigate('/login');
+    }
+  }, [user, loading, navigate]);
+
+  if (loading) {
+    return <div className="flex-1 flex justify-center items-center text-2xl">Loading...</div>
+  }
+
+  if (!user) {
+    return null;
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -133,10 +151,6 @@ const NewHaulForm = () => {
       }
     }
   };
-
-  if (!user) {
-    return <div className="flex-1 flex justify-center items-center text-2xl">Loading...</div>
-  }
 
   return (
     <div className="flex flex-col">

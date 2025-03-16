@@ -13,12 +13,6 @@ interface FormData {
 }
 
 const EditProfileForm = () => {
-  const context = useContext(UserContext);
-  if (!context) {
-    throw new Error("No user context");
-  }
-  const { user, setUser } = context;
-
   const [formData, setFormData] = useState<FormData>({
     firstName: '',
     lastName: '',
@@ -26,12 +20,18 @@ const EditProfileForm = () => {
     state: '',
     bio: '',
   });
-
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
-
   const navigate = useNavigate();
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error("No user context");
+  }
+  const { user, loading, setUser } = context;
 
   useEffect(() => {
+    if (!loading && !user) {
+      navigate('/login');
+    }
     if (user) {
       setFormData({
         firstName: user.firstName || '',
@@ -41,7 +41,15 @@ const EditProfileForm = () => {
         bio: user.bio || '',
       });
     }
-  }, [user])
+  }, [user, loading, navigate])
+
+  if (loading) {
+    return <div className="flex-1 flex justify-center items-center text-2xl">Loading...</div>
+  }
+
+  if (!user) {
+    return null;
+  }
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();

@@ -4,9 +4,11 @@ import Footer from './Footer';
 
 function App() {
   return (
-    <div className="flex flex-col flex-1 max-w-3xl w-4/5 items-center">
+    <div className="bg-stone-100 min-h-screen flex flex-col items-center">
       <Header />
-      <Outlet />
+      <div className="flex-grow w-full flex justify-center items-center p-10">
+        <Outlet />
+      </div>
       <Footer />
     </div>
   );

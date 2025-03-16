@@ -9,11 +9,11 @@ const Home = () => {
   }
 
   if (error) {
-    return <div className="flex-1">{error}</div>;
+    return <div>{error}</div>;
   }
 
   return (
-    <div className="w-full flex-1 p-2">
+    <div className="w-full p-5">
       <button>+ New Haul</button>
       <h2 className="text-lg font-medium mb-5">Recent Hauls</h2>
       {hauls.length > 0 ? (

@@ -1,7 +1,9 @@
 @import 'tailwindcss';
 
 @layer base {
-  * {
+  *,
+  *::before,
+  *::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -17,5 +19,18 @@
 @layer components {
   button {
     cursor: pointer;
+  }
+}
+
+@theme {
+  --animate-fade-out: fade-out 1.5s ease-out 1s;
+
+  @keyframes fade-out {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
   }
 }

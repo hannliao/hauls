@@ -3,7 +3,7 @@ import { Comment } from './comment';
 
 export interface Haul {
   id: string;
-  dateOfPurchase: string; // Keeping as string since DateTime is usually serialized as a string in APIs
+  dateOfPurchase: string;
   storeName: string;
   slug: string;
   notes?: string;

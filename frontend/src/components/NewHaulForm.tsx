@@ -1,5 +1,5 @@
 import { useReducer, useContext, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { createHaul } from '../api/hauls';
 import { HaulContext } from '../contexts/HaulContext';
 import { UserContext } from '../contexts/UserContext';
@@ -134,74 +134,100 @@ const NewHaulForm = () => {
     }
   };
 
+  if (!user) {
+    return <div className="flex-1 flex justify-center items-center text-2xl">Loading...</div>
+  }
+
   return (
-    <form onSubmit={handleSubmit} className="flex-1 w-full flex flex-col">
-      <h2 className="font-semibold text-xl mb-8">New Haul</h2>
-      
-      <div className="flex items-start gap-20">
-        <div className="flex flex-col justify-center">
-          <label htmlFor="dateOfPurchase">Date of Purchase</label>
-          <input
-            type="date"
-            className="border-2 border-stone-300 rounded-lg p-2 my-2 mb-8 text-lg"
-            name="dateOfPurchase"
-            value={dateOfPurchase}
-            onChange={handleChange}
-            required
-          />
-
-          <label htmlFor="storeName">Store</label>
-          <input
-            type="text"
-            className="border-2 border-stone-300 rounded-lg p-2 my-2 text-lg"
-            name="storeName"
-            value={storeName}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div className="w-full flex flex-col">
-          <label htmlFor="notes">Notes <i>(optional)</i></label>
-          <textarea
-            className="border-2 border-stone-300 rounded-lg p-2 my-2 text-lg"
-            name="notes"
-            cols={30} 
-            rows={5} 
-            value={notes} 
-            onChange={handleChange}>
-          </textarea>
-        </div>
+    <div className="flex flex-col">
+      <div className="w-full flex justify-start mb-4">
+        <Link to={`/${user!.username}`} className="flex space-x-2 p-2 px-4 rounded-lg hover:bg-stone-200">
+          <img src="/icons/arrow-left.svg" alt="back" className="w-5" />
+          <p className="font-medium text-lg">Back</p>
+        </Link>
       </div>
-      
-      <div className="my-4">
-        <h3>Items</h3>
-        {/* list of items */}
-        {items.map((item, index) => (
+      <form onSubmit={handleSubmit} className="bg-white rounded-lg p-8 flex flex-col max-w-3xl mx-auto">
+        <h2 className="font-semibold text-xl text-center mb-8">New Haul</h2>
+        {errors.length > 0 && (
+          <div>
+            <ul>
+              {errors.map((error, index) => (
+                <li key={index}>{error}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+        
+        <div className="flex items-start gap-20">
+          <div className="flex flex-col justify-center">
+            <label htmlFor="dateOfPurchase">Date of Purchase</label>
+            <input
+              type="date"
+              className="border-2 border-stone-300 rounded-lg p-2 my-2 mb-8 text-lg"
+              name="dateOfPurchase"
+              value={dateOfPurchase}
+              onChange={handleChange}
+              required
+            />
+
+            <label htmlFor="storeName">Store</label>
+            <input
+              type="text"
+              className="border-2 border-stone-300 rounded-lg p-2 my-2 text-lg"
+              name="storeName"
+              value={storeName}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="w-full flex flex-col">
+            <label htmlFor="notes">Notes <i>(optional)</i></label>
+            <textarea
+              className="border-2 border-stone-300 rounded-lg p-2 my-2 text-lg"
+              name="notes"
+              cols={30} 
+              rows={5} 
+              value={notes} 
+              onChange={handleChange}>
+            </textarea>
+          </div>
+        </div>
+        
+        <div className="my-4">
+          <h3>Items</h3>
+          {/* list of items */}
+          {items.map((item, index) => (
+            <ItemInput
+              key={index}
+              item={item}
+              index={index}
+              onChange={handleItemChange}
+              onToggle={handleToggle}
+            />
+          ))}
+          {/* add new item */}
           <ItemInput
-            key={index}
-            item={item}
-            index={index}
+            item={newItem}
             onChange={handleItemChange}
             onToggle={handleToggle}
+            onAdd={handleItemAdd}
           />
-        ))}
-        {/* add new item */}
-        <ItemInput
-          item={newItem}
-          onChange={handleItemChange}
-          onToggle={handleToggle}
-          onAdd={handleItemAdd}
-        />
-      </div>
+        </div>
 
-      <div className="flex flex-col">
-        <label htmlFor="images">Images <i>(optional)</i></label>
-        <input type="file" className="w-fit bg-stone-200 hover:bg-stone-300 rounded-lg p-2 my-2 cursor-pointer" name="images" accept="image/*" onChange={handleFileChange} multiple />
-      </div>
-      
-      <button type="submit" className="p-2 my-8 bg-lime-600 hover:bg-lime-500 rounded-lg font-semibold">Post</button>
-    </form>
+        <div className="flex flex-col">
+          <label htmlFor="images">Images <i>(optional)</i></label>
+          <input type="file" className="w-fit bg-stone-200 hover:bg-stone-300 rounded-lg p-2 my-2 cursor-pointer" name="images" accept="image/*" onChange={handleFileChange} multiple />
+        </div>
+        
+        <button
+          type="submit" 
+          className="w-full bg-lime-700 hover:bg-lime-600 rounded-full p-3 mt-5 text-white font-semibold"
+        >
+          Upload
+        </button>
+      </form>
+    </div>
   )
 }
 

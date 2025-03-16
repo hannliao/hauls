@@ -1,10 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getUser } from '../api/user';
-
-interface User {
-  id: string;
-  username: string;
-}
+import { User } from '../types/user'
 
 interface UseUserResult {
   user: User | null;

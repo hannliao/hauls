@@ -1,9 +1,10 @@
 import { createContext, ReactNode } from 'react';
 import useUser from '../hooks/useUser';
+import { User } from '../types/user'
 
 interface UserContextType {
-  user: {id : string; username: string } | null;
-  setUser: React.Dispatch<React.SetStateAction<{id: string; username: string} | null>>;
+  user: User | null;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
   loading: boolean;
   error: any;
 }

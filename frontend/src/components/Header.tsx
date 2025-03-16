@@ -1,20 +1,44 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router';
 import { UserContext } from '../contexts/UserContext';
-import { Link } from 'react-router';
 
 const Header = () => {
   const userContext = useContext(UserContext);
   if (!userContext) {
     return <div>Loading...</div>;
   }
-  const { user, loading } = userContext;
+  const { user, setUser } = userContext;
+  const navigate = useNavigate();
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement | null>(null);
 
-  if (loading) {
-    return <div>Loading...</div>;
+  const toggleUserMenu = () => {
+    setIsUserMenuOpen(!isUserMenuOpen);
   }
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.clear();
+    setUser(null);
+    setIsUserMenuOpen(false);
+    console.log('Logged out');
+    navigate('/login');
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setIsUserMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [userMenuRef]);
+
   return (
-    <header className="w-full flex justify-between items-center py-5">
+    <header className="sticky bg-white w-full flex justify-between items-center p-2 px-6">
       <Link to="/">
         <h1 className="font-bold text-3xl p-2 hover:text-lime-600">
           hauls
@@ -22,13 +46,22 @@ const Header = () => {
       </Link>
       <div>
         {user ? (
-          <Link to={`${user.username}`}>
+          <div className="relative" ref={userMenuRef}>
             <img
               src="/icons/person-circle.svg"
               alt="dashboard"
-              className="w-12"
+              className="w-12 hover:cursor-pointer"
+              onClick={toggleUserMenu}
             />
-          </Link>
+            {isUserMenuOpen && (
+              <div className="absolute top-12 right-2 flex flex-col text-stone-400 border-2 border-stone-200 bg-white">
+                <button className="p-2 px-6 hover:bg-stone-100 border-b-1 border-stone-200" onClick={toggleUserMenu} >
+                  <Link to={`${user.username}`}>@{user.username}</Link>
+                </button>
+                <button onClick={handleLogout} className="p-2 px-6 hover:bg-stone-100">Log out</button>
+            </div>
+            )}
+          </div>
         ) : (
           <Link to="/login">
             <img

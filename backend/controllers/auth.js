@@ -66,7 +66,7 @@ exports.loginPost = (req, res, next) => {
     return res.status(200).json({
       message: 'Login successful',
       token,
-      user: { id: user.id, username: user.username },
+      user: payload,
       redirect: '/',
     });
   })(req, res, next);

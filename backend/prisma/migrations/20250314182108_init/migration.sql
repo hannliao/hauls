@@ -15,7 +15,7 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "Haul" (
     "id" TEXT NOT NULL,
-    "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "dateOfPurchase" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "storeName" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
     "notes" TEXT,
@@ -31,7 +31,7 @@ CREATE TABLE "Item" (
     "haulId" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "quantity" INTEGER NOT NULL DEFAULT 1,
-    "price" DECIMAL(65,30),
+    "price" TEXT NOT NULL,
     "recommended" BOOLEAN NOT NULL DEFAULT false,
     "onSale" BOOLEAN NOT NULL DEFAULT false,
 

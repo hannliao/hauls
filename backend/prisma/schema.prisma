@@ -27,16 +27,16 @@ model User {
 }
 
 model Haul {
-  id            String      @id @default(uuid())
-  date          DateTime    @default(now())
-  storeName     String      
-  slug          String      @unique // URL-friendly identifier
-  notes         String?     
-  images        String[]    // array of image URLs from Supabase Storage
-  user          User        @relation(fields: [userId], references: [id])
-  userId        String
-  items         Item[]
-  comments      Comment[]
+  id              String      @id @default(uuid())
+  dateOfPurchase  DateTime    @default(now())
+  storeName       String      
+  slug            String      @unique // URL-friendly identifier
+  notes           String?     
+  images          String[]    // array of image URLs from Supabase Storage
+  user            User        @relation(fields: [userId], references: [id])
+  userId          String
+  items           Item[]
+  comments        Comment[]
 }
 
 model Item {           // each item is specific to a haul, not a global list of items
@@ -45,7 +45,7 @@ model Item {           // each item is specific to a haul, not a global list of 
   haulId      String
   name        String
   quantity    Int      @default(1)
-  price       Decimal? 
+  price       String
   recommended Boolean  @default(false)
   onSale      Boolean  @default(false)
   

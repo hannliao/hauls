@@ -2,12 +2,12 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('node:path');
-const passport = require('./auth/passport');
 
 const authRouter = require('./routes/auth');
 const haulsRouter = require('./routes/hauls');
 const commentsRouter = require('./routes/comments');
 const userRouter = require('./routes/user');
+const { optionalAuth } = require('./auth/optionalAuth');
 
 const app = express();
 
@@ -18,12 +18,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', authRouter);
-app.use('/api/hauls', haulsRouter, commentsRouter);
-app.use(
-  '/api/users',
-  passport.authenticate('jwt', { session: false }),
-  userRouter
-);
+app.use('/api/hauls', optionalAuth, haulsRouter, commentsRouter);
+app.use('/api/users', optionalAuth, userRouter);
 
 app.use((err, req, res, next) => {
   console.error(err);

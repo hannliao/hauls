@@ -2,6 +2,7 @@ import { useState, useContext } from 'react';
 import { UserContext } from '../contexts/UserContext';
 import { Link, useNavigate } from 'react-router';
 import { loginUser } from '../api/auth';
+import { User } from '../types/user';
 
 interface Error {
   msg: string;
@@ -9,7 +10,8 @@ interface Error {
 
 interface LoginResponse {
   message: string;
-  user?: { id: string; username: string };
+  token: string;
+  user?: User;
   redirect?: string;
 }
 
@@ -18,20 +20,23 @@ const Login = () => {
   const [password, setPassword] = useState<string>('');
   const [errors, setErrors] = useState<Error[]>([]);
 
+  const navigate = useNavigate();
   const context = useContext(UserContext);
   if (!context) {
     throw new Error("UserContext is not available");
   }
-  const { setUser } = context;
-  const navigate = useNavigate();
-
+  const { setToken, setUser } = context;
+  
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
       const response: LoginResponse = await loginUser(username, password);
       console.log(response.message);
-      const user = response.user || null;
-      setUser(user);
+      console.log('login response:', response);
+      if (response.user && response.token) {
+        setToken(response.token);
+        setUser(response.user);
+      }
       if (response.redirect) {
         navigate(response.redirect);
       }
@@ -44,7 +49,7 @@ const Login = () => {
   };
 
   return (
-    <div className="w-full flex-1 flex flex-col items-center justify-center">
+    <div className="place-self-center w-full flex-1 flex flex-col items-center justify-center">
       {errors.length > 0 && (
         <div>
           {errors.map((error, index) => (

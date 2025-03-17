@@ -1,3 +1,5 @@
+import { getUser } from "./user";
+
 interface LoginResponse {
   token: string;
   message: string;
@@ -24,7 +26,10 @@ export const loginUser = async (username: string, password: string): Promise<Log
     throw data as ErrorResponse;
   }
   localStorage.setItem('token', data.token);
-  return data;
+
+  const userResponse = await getUser();
+
+  return { ...data, user: userResponse.user };
 };
 
 export const createUser = async (

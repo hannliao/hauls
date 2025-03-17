@@ -6,7 +6,7 @@ function App() {
   return (
     <div className="bg-stone-100 min-h-screen flex flex-col items-center">
       <Header />
-      <div className="flex-grow w-full flex justify-center items-center p-10">
+      <div className="flex-grow w-full flex justify-center items-start p-10">
         <Outlet />
       </div>
       <Footer />

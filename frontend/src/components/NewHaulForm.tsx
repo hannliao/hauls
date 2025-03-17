@@ -155,12 +155,12 @@ const NewHaulForm = () => {
   return (
     <div className="flex flex-col">
       <div className="w-full flex justify-start mb-4">
-        <Link to={`/${user!.username}`} className="flex space-x-2 p-2 px-4 rounded-lg hover:bg-stone-200">
+        <Link to='/' className="flex space-x-2 p-2 px-4 rounded-lg hover:bg-stone-200">
           <img src="/icons/arrow-left.svg" alt="back" className="w-5" />
           <p className="font-medium text-lg">Back</p>
         </Link>
       </div>
-      <form onSubmit={handleSubmit} className="bg-white rounded-lg p-8 flex flex-col max-w-3xl mx-auto">
+      <form onSubmit={handleSubmit} className="bg-white rounded-lg p-8 flex flex-col min-w-3xl mx-auto">
         <h2 className="font-semibold text-xl text-center mb-8">New Haul</h2>
         {errors.length > 0 && (
           <div>

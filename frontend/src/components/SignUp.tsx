@@ -71,7 +71,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="w-full flex-1 flex flex-col items-center justify-center">
+    <div className="place-self-center flex-1 flex flex-col items-center justify-center">
       {errors.length > 0 && (
         <div>
           {errors.map((error, index) => (

@@ -7,6 +7,8 @@ interface UserContextType {
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
   loading: boolean;
   error: any;
+  token: string | null;
+  setToken: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 export const UserContext = createContext<UserContextType | null>(null);
@@ -16,10 +18,10 @@ interface UserProviderProps {
 }
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
-  const { user, setUser, loading, error } = useUser();
+  const { user, setUser, loading, error, token, setToken } = useUser();
 
   return (
-    <UserContext.Provider value={{ user, setUser, loading, error }}>
+    <UserContext.Provider value={{ user, setUser, loading, error, token, setToken }}>
       {children}
     </UserContext.Provider>
   );

@@ -29,17 +29,21 @@ const EditProfileForm = () => {
   const { user, loading, setUser } = context;
 
   useEffect(() => {
+    console.log("useEffect triggered, user:", user, "loading:", loading);
     if (!loading && !user) {
       navigate('/login');
     }
-    if (user) {
-      setFormData({
+    if (user && user.firstName) {
+      console.log('user data received:', user);
+      setFormData((prevFormData) => ({
+        ...prevFormData,
         firstName: user.firstName || '',
         lastName: user.lastName || '',
         city: user.city || '',
         state: user.state || '',
         bio: user.bio || '',
-      });
+      }));
+      console.log('formData updated:', formData);
     }
   }, [user, loading, navigate])
 
@@ -92,7 +96,7 @@ const EditProfileForm = () => {
           <p className="font-medium text-lg">Back</p>
         </Link>
       </div>
-      <form onSubmit={handleSubmit} className="bg-white rounded-lg p-10 max-w-xl mx-auto flex flex-col items-center">
+      <form onSubmit={handleSubmit} className="bg-white rounded-lg p-10 px-16 max-w-xl mx-auto flex flex-col items-center">
         <h2 className="font-semibold text-xl text-center mb-8">Edit Profile</h2>
         <div className="w-full flex space-x-6">
           <div className="flex-grow flex flex-col mb-4">
@@ -155,7 +159,7 @@ const EditProfileForm = () => {
             name="bio"
             id="bio"
             cols={30}
-            rows={5}
+            rows={7}
             placeholder="How often do you go to the grocery store? What are your essentials? What's your favorite treat?"
             value={formData.bio}
             onChange={handleChange}

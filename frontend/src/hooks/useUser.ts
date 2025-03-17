@@ -7,6 +7,8 @@ interface UseUserResult {
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
   loading: boolean;
   error: any;
+  token: string | null;
+  setToken: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const useUser = (): UseUserResult => {
@@ -16,14 +18,20 @@ const useUser = (): UseUserResult => {
   const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
 
   useEffect(() => {
+    console.log('token:', token);
     const fetchUser = async () => {
+      setLoading(true);
       if (token) {
         try {
           const data = await getUser();
-          setUser(data.user);
+          console.log('API response user:', data.user);
+          if (data && data.user) {
+            setUser(data.user);
+          }
         } catch (err: any) {
           console.error(err.message);
           setError(err);
+          setUser(null);
         } finally {
           setLoading(false);
         }
@@ -35,7 +43,15 @@ const useUser = (): UseUserResult => {
     fetchUser();
   }, [token]);
 
-  return { user, setUser, loading, error };
+  useEffect(() => {
+    if (token) {
+      localStorage.setItem('token', token);
+    } else {
+      localStorage.removeItem('token');
+    }
+  }, [token]);
+
+  return { user, setUser, loading, error, token, setToken };
 };
 
 export default useUser;

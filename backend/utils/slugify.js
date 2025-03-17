@@ -1,3 +1,5 @@
+const { format } = require('date-fns');
+
 const slugify = (date, storeName) => {
   const formattedDate = format(new Date(date), 'yyyy-MM-dd');
   const slugifiedStoreName = storeName

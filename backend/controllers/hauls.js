@@ -5,7 +5,7 @@ exports.getHauls = async (req, res) => {
   try {
     const allHauls = await prisma.haul.findMany({
       orderBy: {
-        timestamp: 'desc',
+        dateOfPurchase: 'desc',
       },
     });
     res.status(200).json(allHauls);
@@ -16,12 +16,13 @@ exports.getHauls = async (req, res) => {
 
 exports.createHaul = async (req, res) => {
   try {
-    const { date, storeName, notes, images, userId, items } = req.body;
-    const slug = slugify(date, storeName);
+    const { dateOfPurchase, storeName, notes, images, userId, items } =
+      req.body;
+    const slug = slugify(dateOfPurchase, storeName);
 
     const haul = await prisma.haul.create({
       data: {
-        date,
+        dateOfPurchase,
         storeName,
         slug,
         notes,
@@ -51,13 +52,14 @@ exports.createHaul = async (req, res) => {
 exports.updateHaul = async (req, res) => {
   try {
     const haulId = parseInt(req.params.id, 10);
-    const { date, storeName, notes, images, userId, items } = req.body;
-    const newSlug = slugify(date, storeName);
+    const { dateOfPurchase, storeName, notes, images, userId, items } =
+      req.body;
+    const newSlug = slugify(dateOfPurchase, storeName);
 
     const haul = await prisma.haul.update({
       where: { id: haulId },
       data: {
-        date,
+        dateOfPurchase,
         storeName,
         slug: newSlug,
         notes,

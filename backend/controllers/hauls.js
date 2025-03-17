@@ -16,8 +16,10 @@ exports.getHauls = async (req, res) => {
 
 exports.createHaul = async (req, res) => {
   try {
-    const { dateOfPurchase, storeName, notes, images, userId, items } =
-      req.body;
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ error: 'Unauthorized: User not found' });
+    }
+    const { dateOfPurchase, storeName, notes, images, items } = req.body;
     const slug = slugify(dateOfPurchase, storeName);
 
     const haul = await prisma.haul.create({
@@ -27,7 +29,7 @@ exports.createHaul = async (req, res) => {
         slug,
         notes,
         images: images || [],
-        userId,
+        userId: req.user.id,
         items: {
           create: items.map((item) => ({
             name: item.name,

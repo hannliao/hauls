@@ -45,7 +45,7 @@ model Item {           // each item is specific to a haul, not a global list of 
   haulId      String
   name        String
   quantity    Int      @default(1)
-  price       String
+  price       String?
   recommended Boolean  @default(false)
   onSale      Boolean  @default(false)
   

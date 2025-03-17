@@ -14,6 +14,26 @@ exports.getHauls = async (req, res) => {
   }
 };
 
+exports.getHaulByUrl = async (req, res) => {
+  try {
+    const { username, slug } = req.params;
+    const haul = await prisma.haul.findUnique({
+      where: { username: username, slug: slug },
+      include: {
+        items: true,
+      },
+    });
+
+    if (!haul) {
+      return res.status(404).json({ error: 'Haul not found' });
+    }
+
+    return res.status(200).json({ haul });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 exports.createHaul = async (req, res) => {
   try {
     if (!req.user || !req.user.id) {
@@ -30,6 +50,7 @@ exports.createHaul = async (req, res) => {
         notes,
         images: images || [],
         userId: req.user.id,
+        username: req.user.username,
         items: {
           create: items.map((item) => ({
             name: item.name,

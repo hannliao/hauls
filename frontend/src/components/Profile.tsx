@@ -38,7 +38,7 @@ const Profile = () => {
     <div>
       <div className="relative bg-white rounded-lg max-h-fit p-8 m-10 flex flex-col justify-start items-center text-center">
           <h2 className="font-bold text-3xl">{profileUser.firstName} {profileUser.lastName}</h2>
-          <h3 className="text-lg text-lime-700">@{profileUser.username}</h3>
+          <h3 className="text-lg text-cyan-600">@{profileUser.username}</h3>
           {profileUser.bio && (
             <p className="max-w-xl my-2">{profileUser.bio}</p>
           )}

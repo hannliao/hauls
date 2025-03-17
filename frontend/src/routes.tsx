@@ -1,11 +1,11 @@
 import App from './components/App'
+import Home from './components/Home'
 import SignUp from './components/SignUp'
 import Login from './components/Login'
-import Home from './components/Home'
 import NewHaulForm from './components/NewHaulForm';
-// import Dashboard from './components/Dashboard';
 import Profile from './components/Profile';
 import EditProfileForm from './components/EditProfileForm'
+import HaulDetails from './components/HaulDetails';
 
 const routes = [
   {
@@ -13,11 +13,12 @@ const routes = [
     element: <App />,
     children: [
       { index: true, element: <Home />},
-      { path: 'new', element: <NewHaulForm />},
       { path: 'signup', element: <SignUp />},
       { path: 'login', element: <Login />},
-      { path: ':username', element: <Profile />},
+      { path: 'new', element: <NewHaulForm />},
+      { path: ':username/:slug', element: <HaulDetails />},
       { path: ':username/edit', element: <EditProfileForm />},
+      { path: ':username', element: <Profile />},
     ],
   },
 ];

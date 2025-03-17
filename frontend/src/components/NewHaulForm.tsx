@@ -126,6 +126,8 @@ const NewHaulForm = () => {
     }
     
     try {
+      const isoDate = new Date(`${dateOfPurchase}T00:00:00.000Z`).toISOString();
+
       let imageUrls: string[] = [];
 
       if (images.length > 0) {
@@ -133,17 +135,23 @@ const NewHaulForm = () => {
       }
       
       const formData: HaulFormData = {
-        dateOfPurchase,
+        dateOfPurchase: isoDate,
         storeName,
-        items,
+        items: items.map((item) => ({
+          name: item.name,
+          quantity: Number(item.quantity),
+          price: item.price,
+          recommended: item.recommended,
+          onSale: item.onSale,
+        })),
         notes,
         images: imageUrls,
       }
 
       const response = await createHaul(formData);
-      console.log(response.message);
+      console.log('response from createHaul:', response);
       setHauls([response.haul, ...hauls]);
-      navigate(`${user.username}/hauls/${response.haul.id}`);
+      navigate(`/${user.username}/${response.haul.slug}`);
     } catch (err: any) {
       console.error(err);
       if (err.errors) {

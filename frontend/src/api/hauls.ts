@@ -13,6 +13,18 @@ export const getHauls = async () => {
   return response.json();
 };
 
+export const getHaulByUrl = async (username: string, slug: string) => {
+  const response = await fetch(
+    `${apiUrl}/api/hauls?username=${username}&slug=${slug}`
+  )
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw error;
+  }
+  return response.json();
+}
+
 export const createHaul = async (formData: HaulFormData) => {
   const token = localStorage.getItem('token');
   if (!token) throw new Error('token is missing');

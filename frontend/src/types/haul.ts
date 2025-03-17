@@ -9,6 +9,7 @@ export interface Haul {
   notes?: string;
   images?: string[];
   userId: string;
+  username: string;
   items: Item[];
   comments: Comment[];
 }
@@ -34,7 +35,7 @@ export interface HaulCardProps {
   dateOfPurchase: string;
   storeName: string;
   slug: string;
-  userId: string;
+  username: string;
   items: Item[];
   notes?: string;
 }

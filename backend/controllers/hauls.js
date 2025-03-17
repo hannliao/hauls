@@ -7,6 +7,9 @@ exports.getHauls = async (req, res) => {
       orderBy: {
         dateOfPurchase: 'desc',
       },
+      include: {
+        items: true,
+      },
     });
     res.status(200).json(allHauls);
   } catch (err) {

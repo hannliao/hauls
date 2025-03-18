@@ -71,6 +71,14 @@ exports.createHaul = async (req, res) => {
     });
     return res.status(201).json({ message: 'haul saved', haul });
   } catch (err) {
+    if (error.code === 'P2002') {
+      res
+        .status(400)
+        .json({
+          error:
+            'A haul with this store and date already exists for this user. Please change the store name (e.g. Costco #2).',
+        });
+    }
     return res.status(500).json({ error: err.message });
   }
 };

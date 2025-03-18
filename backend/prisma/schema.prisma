@@ -38,6 +38,8 @@ model Haul {
   username        String
   items           Item[]
   comments        Comment[]
+
+  @@unique([username, slug])
 }
 
 model Item {           // each item is specific to a haul, not a global list of items

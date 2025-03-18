@@ -15,7 +15,7 @@ export const getHauls = async () => {
 
 export const getHaulByUrl = async (username: string, slug: string) => {
   const response = await fetch(
-    `${apiUrl}/api/hauls?username=${username}&slug=${slug}`
+    `${apiUrl}/api/hauls/${username}/${slug}`
   )
 
   if (!response.ok) {

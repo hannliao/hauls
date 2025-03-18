@@ -32,10 +32,5 @@ export interface HaulFormData {
 }
 
 export interface HaulCardProps {
-  dateOfPurchase: string;
-  storeName: string;
-  slug: string;
-  username: string;
-  items: Item[];
-  notes?: string;
+  haul: Haul;
 }

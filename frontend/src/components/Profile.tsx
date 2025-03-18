@@ -3,6 +3,8 @@ import { Link, useParams } from 'react-router'
 import { UserContext } from '../contexts/UserContext';
 import { User } from '../types/user';
 import { getUserByUsername } from '../api/user';
+import { HaulContext } from '../contexts/HaulContext';
+import HaulCard from './HaulCard';
 
 const Profile = () => {
   const context = useContext(UserContext);
@@ -13,6 +15,10 @@ const Profile = () => {
   
   const { username } = useParams<{ username: string }>();
   const [profileUser, setProfileUser] = useState<User | null>(null);
+
+  const { hauls } = useContext(HaulContext);
+
+  const userHauls = hauls.filter((haul) => haul.username === username);
 
   useEffect(() => {
     const fetchProfileUser = async () => {
@@ -35,12 +41,12 @@ const Profile = () => {
   const isOwnProfile = loggedInUser?.username == profileUser.username;
 
   return (
-    <div>
-      <div className="relative bg-white rounded-lg max-h-fit p-8 m-10 flex flex-col justify-start items-center text-center">
+    <div className="w-full max-w-4xl flex flex-col items-center">
+      <div className="relative bg-white rounded-lg w-full max-h-fit p-8 m-10 flex flex-col justify-start items-center text-center">
           <h2 className="font-bold text-3xl">{profileUser.firstName} {profileUser.lastName}</h2>
           <h3 className="text-lg text-cyan-600">@{profileUser.username}</h3>
           {profileUser.bio && (
-            <p className="max-w-xl my-2">{profileUser.bio}</p>
+            <p className="max-w-xl my-2 whitespace-pre-line">{profileUser.bio}</p>
           )}
           {profileUser.city && profileUser.state && (
             <div className="flex space-x-1 justify-center items-center">
@@ -57,9 +63,15 @@ const Profile = () => {
             </div>
           )}
       </div>
-      <h2 className="font-semibold text-xl mb-8">Recent Hauls</h2>
-      <div className="flex flex-col items-center">
-        haul cards go here
+      <h2 className="place-self-start font-semibold text-xl mb-8">Recent Hauls</h2>
+      <div className="w-xl flex flex-col items-center">
+        {userHauls.length > 0 ? (
+          userHauls.map((haul) => 
+            <HaulCard key={haul.id} haul={haul} />
+          )
+        ) : (
+          <p>No hauls found.</p>
+        )}
       </div>
     </div>
   )

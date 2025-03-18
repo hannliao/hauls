@@ -158,8 +158,8 @@ const EditProfileForm = () => {
             className="border border-stone-300 w-full rounded-lg p-2 mb-2"
             name="bio"
             id="bio"
-            cols={30}
-            rows={7}
+            cols={50}
+            rows={10}
             placeholder="How often do you go to the grocery store? What are your essentials? What's your favorite treat?"
             value={formData.bio}
             onChange={handleChange}

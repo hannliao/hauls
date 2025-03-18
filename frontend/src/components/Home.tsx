@@ -20,15 +20,7 @@ const Home = () => {
       {hauls.length > 0 ? (
         <div className="flex flex-col">
           {hauls.map((haul, index) => (
-            <HaulCard
-              key={index}
-              storeName={haul.storeName}
-              dateOfPurchase={haul.dateOfPurchase}
-              items={haul.items}
-              username={haul.username}
-              slug={haul.slug}
-              notes={haul.notes}
-            />
+            <HaulCard key={index} haul={haul} />
           ))}
         </div>
       ) : (

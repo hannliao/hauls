@@ -5,8 +5,18 @@ const ItemInput: React.FC<ItemInputProps> = ({
   index,
   onChange,
   onToggle,
-  onAdd
+  onAdd,
+  onDelete
 }) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();   // prevent form submission
+      if (onAdd) {
+        onAdd();
+      }
+    }
+  }
+  
   return (
     <div className="flex items-center">
       <button 
@@ -39,6 +49,7 @@ const ItemInput: React.FC<ItemInputProps> = ({
         name="name"
         value={item.name}
         onChange={(e) => onChange(e, index)}
+        onKeyDown={handleKeyDown}
         placeholder="new item..."
       />
 
@@ -68,13 +79,19 @@ const ItemInput: React.FC<ItemInputProps> = ({
       </div>
 
       {onAdd && (
-        <button type="button" className="p-2 m-2" onClick={onAdd}>
+        <button type="button"
+          className="p-2 m-2"
+          onClick={onAdd}
+        >
           <img src="icons/corner-down-left.svg" alt="enter" />
         </button>
       )}
 
-      {!onAdd && (
-        <button type="button" className="w-10 p-2 m-2">
+      {onDelete && index !== undefined && (
+        <button type="button"
+          className="w-10 p-2 m-2"
+          onClick={() => onDelete(index)}
+        >
           <img src="icons/trash-outline.svg" alt="delete" />
         </button>
       )}

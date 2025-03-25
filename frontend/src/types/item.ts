@@ -12,4 +12,5 @@ export interface ItemInputProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>, index?: number) => void;
   onToggle: (field: 'recommended' | 'onSale', index?: number) => void;
   onAdd?: () => void;
+  onDelete?: (index: number) => void;
 }

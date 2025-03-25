@@ -105,6 +105,10 @@ const NewHaulForm = () => {
     setNewItem({ name: '', quantity: 1, price: '', recommended: false, onSale: false });    // reset input fields
   }
 
+  const handleItemDelete = (index: number) => {
+    dispatch({ type: 'REMOVE_ITEM', index});
+  }
+
   const handleToggle = (field: 'recommended' | 'onSale', index?: number) => {
     if (index !== undefined) {
       dispatch({
@@ -226,6 +230,7 @@ const NewHaulForm = () => {
               index={index}
               onChange={handleItemChange}
               onToggle={handleToggle}
+              onDelete={handleItemDelete}
             />
           ))}
           {/* add new item */}

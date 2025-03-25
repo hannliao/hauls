@@ -17,6 +17,9 @@ const HaulCard: React.FC<HaulCardProps> = ({ haul }) => {
         </div>
         
         <hr className="text-stone-200 mb-2" />
+        {notes &&
+          <p className="text-sm italic mb-2">{notes}</p>
+        }
         <div>
           <ul>
             {items &&

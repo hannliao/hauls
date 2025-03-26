@@ -6,6 +6,7 @@ import NewHaulForm from './components/NewHaulForm';
 import Profile from './components/Profile';
 import EditProfileForm from './components/EditProfileForm'
 import HaulDetails from './components/HaulDetails';
+import EditHaulForm from './components/EditHaulForm';
 
 const routes = [
   {
@@ -16,6 +17,7 @@ const routes = [
       { path: 'signup', element: <SignUp />},
       { path: 'login', element: <Login />},
       { path: 'new', element: <NewHaulForm />},
+      { path: ':username/:slug/edit', element: <EditHaulForm />},
       { path: ':username/:slug', element: <HaulDetails />},
       { path: ':username/edit', element: <EditProfileForm />},
       { path: ':username', element: <Profile />},

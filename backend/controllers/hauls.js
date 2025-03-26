@@ -1,5 +1,6 @@
 const prisma = require('../prisma/seed');
 const slugify = require('../utils/slugify');
+const uploadImages = require('../utils/uploadImages');
 
 exports.getHauls = async (req, res) => {
   try {
@@ -37,61 +38,62 @@ exports.getHaulByUrl = async (req, res) => {
   }
 };
 
-exports.createHaul = async (req, res) => {
-  try {
-    if (!req.user || !req.user.id) {
-      return res.status(401).json({ error: 'Unauthorized: User not found' });
-    }
-    const { dateOfPurchase, storeName, notes, images, items } = req.body;
-    const slug = slugify(dateOfPurchase, storeName);
+exports.createHaul = [
+  // uploadImages,
+  async (req, res) => {
+    try {
+      if (!req.user || !req.user.id) {
+        return res.status(401).json({ error: 'Unauthorized: User not found' });
+      }
+      const { dateOfPurchase, storeName, notes, items } = req.body;
+      const slug = slugify(dateOfPurchase, storeName);
 
-    const haul = await prisma.haul.create({
-      data: {
-        dateOfPurchase,
-        storeName,
-        slug,
-        notes,
-        images: images || [],
-        userId: req.user.id,
-        username: req.user.username,
-        items: {
-          create: items.map((item) => ({
-            name: item.name,
-            quantity: item.quantity || 1,
-            price: item.price || null,
-            recommended: item.recommended || false,
-            onSale: item.onSale || false,
-          })),
+      const haul = await prisma.haul.create({
+        data: {
+          dateOfPurchase,
+          storeName,
+          slug,
+          notes,
+          images: req.imageUrls || [],
+          userId: req.user.id,
+          username: req.user.username,
+          items: {
+            create: items.map((item) => ({
+              name: item.name,
+              quantity: item.quantity || 1,
+              price: item.price || null,
+              recommended: item.recommended || false,
+              onSale: item.onSale || false,
+            })),
+          },
         },
-      },
-      include: {
-        items: true,
-        comments: true,
-      },
-    });
-    return res.status(201).json({ message: 'haul saved', haul });
-  } catch (err) {
-    if (error.code === 'P2002') {
-      res
-        .status(400)
-        .json({
+        include: {
+          items: true,
+          comments: true,
+        },
+      });
+      return res.status(201).json({ message: 'haul saved', haul });
+    } catch (err) {
+      if (err.code === 'P2002') {
+        res.status(400).json({
           error:
             'A haul with this store and date already exists for this user. Please change the store name (e.g. Costco #2).',
         });
+      }
+      return res.status(500).json({ error: err.message });
     }
-    return res.status(500).json({ error: err.message });
-  }
-};
+  },
+];
 
 exports.updateHaul = async (req, res) => {
   try {
-    const haulId = parseInt(req.params.id, 10);
+    const { username, slug } = req.params;
     const { dateOfPurchase, storeName, notes, images, userId, items } =
       req.body;
     const newSlug = slugify(dateOfPurchase, storeName);
 
     const haul = await prisma.haul.update({
-      where: { id: haulId },
+      where: { username, slug },
       data: {
         dateOfPurchase,
         storeName,
@@ -99,12 +101,22 @@ exports.updateHaul = async (req, res) => {
         notes,
         images,
         userId,
-        items,
+        items: {
+          deleteMany: {},
+          create: items.map((item) => ({
+            name: item.name,
+            quantity: item.quantity,
+            price: item.price || null,
+            recommended: item.recommended,
+            onSale: item.onSale,
+          })),
+        },
       },
     });
     return res.status(201).json({ message: 'haul saved', haul });
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    console.error(err);
+    return res.status(500).json({ error: err.message, details: err });
   }
 };
 

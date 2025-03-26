@@ -1,9 +1,9 @@
 import { useReducer, useContext, useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router';
-import { createHaul } from '../api/hauls';
+import { Link, useNavigate, useParams } from 'react-router';
+import { getHaulByUrl, updateHaul } from '../api/hauls';
 import { HaulContext } from '../contexts/HaulContext';
 import { UserContext } from '../contexts/UserContext';
-import { HaulState, HaulFormData } from '../types/haul';
+import { Haul, HaulState, HaulFormData } from '../types/haul';
 import { Item } from '../types/item';
 import ItemInput from './ItemInput';
 import { uploadImages } from '../api/uploads';
@@ -14,7 +14,8 @@ type HaulAction =
   | { type: 'SET_ERRORS'; errors: string[] }
   | { type: 'ADD_ITEM'; item: Item }
   | { type: 'UPDATE_ITEM'; index: number; field: string; value: any }
-  | { type: 'REMOVE_ITEM'; index: number };
+  | { type: 'REMOVE_ITEM'; index: number }
+  | { type: 'SET_HAUL'; haul: Haul };
 
 const initialState: HaulState = {
   dateOfPurchase: '',
@@ -43,15 +44,35 @@ const haulReducer = (state: HaulState, action: HaulAction): HaulState => {
       };
     case 'REMOVE_ITEM':
       return { ...state, items: state.items.filter((_, i) => i !== action.index)};
+    case 'SET_HAUL':
+      const haulData = action.haul;
+    
+      return {
+        dateOfPurchase: haulData.dateOfPurchase 
+          ? new Date(haulData.dateOfPurchase).toISOString().split('T')[0]
+          : '',
+        storeName: haulData.storeName,
+        notes: haulData.notes || '',
+        images: [],
+        items: haulData.items.map(item => ({
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price || '',
+          recommended: item.recommended || false,
+          onSale: item.onSale || false
+        })),
+        errors: [],
+      };
     default:
       return state;
   }
 }
 
-const NewHaulForm = () => {
+const EditHaulForm = () => {
   const [state, dispatch] = useReducer(haulReducer, initialState);
   const [newItem, setNewItem] = useState({ name: '', quantity: 1, price: '', recommended: false, onSale: false });
   const navigate = useNavigate();
+  const { username, slug } = useParams<{ username: string, slug: string }>();
   const { dateOfPurchase, storeName, items, notes, images, errors } = state;
   const { hauls, setHauls } = useContext(HaulContext);
   const context = useContext(UserContext);
@@ -59,6 +80,23 @@ const NewHaulForm = () => {
     throw new Error('No user context')
   }
   const { user, loading } = context;
+
+  useEffect(() => {
+    const fetchHaul = async () => {
+      if (!username || !slug) {
+        navigate('/');
+        return;
+      }
+      try {
+        const { haul } = await getHaulByUrl(username, slug);
+        dispatch({ type: 'SET_HAUL', haul });
+      } catch (err) {
+        console.error(err);
+        navigate('/');
+      }
+    }
+    fetchHaul();
+  }, [username, slug, navigate]);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -137,6 +175,13 @@ const NewHaulForm = () => {
       if (images.length > 0) {
         imageUrls = await uploadImages(images);
       }
+
+      // let imageUrls: string[] = existingImages.filter(img => !removedImages.includes(img));
+
+      // if (images.length > 0) {
+      //   const newImageUrls = await uploadImages(images);
+      //   imageUrls = [...imageUrls, ...newImageUrls];
+      // }
       
       const formData: HaulFormData = {
         dateOfPurchase: isoDate,
@@ -152,8 +197,13 @@ const NewHaulForm = () => {
         images: imageUrls,
       }
 
-      const response = await createHaul(formData);
-      setHauls([response.haul, ...hauls]);
+      const response = await updateHaul(username!, slug!, formData);
+      
+      const updatedHauls = hauls.map(haul =>
+        haul.slug === slug ? response.haul : haul
+      );
+      setHauls(updatedHauls);
+
       navigate(`/${user.username}/${response.haul.slug}`);
     } catch (err: any) {
       console.error(err);
@@ -172,7 +222,7 @@ const NewHaulForm = () => {
         </Link>
       </div>
       <form onSubmit={handleSubmit} className="bg-white rounded-lg p-8 flex flex-col min-w-3xl mx-auto">
-        <h2 className="font-semibold text-xl text-center mb-8">New Haul</h2>
+        <h2 className="font-semibold text-xl text-center mb-8">Edit Haul</h2>
         {errors.length > 0 && (
           <div>
             <ul>
@@ -257,4 +307,4 @@ const NewHaulForm = () => {
   )
 }
 
-export default NewHaulForm;
+export default EditHaulForm;

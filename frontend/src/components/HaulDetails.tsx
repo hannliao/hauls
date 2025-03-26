@@ -75,12 +75,12 @@ const HaulDetails = () => {
             </ul>
             {haul.notes && (
               <div className="w-2xs">
-                <p className="italic">"{haul.notes}"</p>
+                <p className="italic">{haul.notes}</p>
               </div>
             )}
           </div>
 
-          {haul.images && (
+          {(haul.images?.length ?? 0) > 0 && (
             <div className='mt-5'>
               <h3>Images</h3>
             </div>

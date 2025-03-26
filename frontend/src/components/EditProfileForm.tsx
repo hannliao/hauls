@@ -29,12 +29,10 @@ const EditProfileForm = () => {
   const { user, loading, setUser } = context;
 
   useEffect(() => {
-    console.log("useEffect triggered, user:", user, "loading:", loading);
     if (!loading && !user) {
       navigate('/login');
     }
     if (user && user.firstName) {
-      console.log('user data received:', user);
       setFormData((prevFormData) => ({
         ...prevFormData,
         firstName: user.firstName || '',
@@ -43,7 +41,6 @@ const EditProfileForm = () => {
         state: user.state || '',
         bio: user.bio || '',
       }));
-      console.log('formData updated:', formData);
     }
   }, [user, loading, navigate])
 

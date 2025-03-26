@@ -83,7 +83,7 @@ const ItemInput: React.FC<ItemInputProps> = ({
           className="p-2 m-2"
           onClick={onAdd}
         >
-          <img src="icons/corner-down-left.svg" alt="enter" />
+          <img src="/icons/corner-down-left.svg" alt="enter" />
         </button>
       )}
 
@@ -92,7 +92,7 @@ const ItemInput: React.FC<ItemInputProps> = ({
           className="w-10 p-2 m-2"
           onClick={() => onDelete(index)}
         >
-          <img src="icons/trash-outline.svg" alt="delete" />
+          <img src="/icons/trash.svg" alt="delete" />
         </button>
       )}
     </div>

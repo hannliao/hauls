@@ -32,7 +32,6 @@ const Login = () => {
     try {
       const response: LoginResponse = await loginUser(username, password);
       console.log(response.message);
-      console.log('login response:', response);
       if (response.user && response.token) {
         setToken(response.token);
         setUser(response.user);

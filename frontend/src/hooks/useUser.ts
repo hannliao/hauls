@@ -18,13 +18,11 @@ const useUser = (): UseUserResult => {
   const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
 
   useEffect(() => {
-    console.log('token:', token);
     const fetchUser = async () => {
       setLoading(true);
       if (token) {
         try {
           const data = await getUser();
-          console.log('API response user:', data.user);
           if (data && data.user) {
             setUser(data.user);
           }

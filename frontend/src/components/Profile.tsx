@@ -64,10 +64,22 @@ const Profile = () => {
           )}
       </div>
       <h2 className="place-self-start font-semibold text-xl mb-8">Recent Hauls</h2>
-      <div className="w-xl flex flex-col items-center">
+      <div className="w-full max-w-4xl flex flex-col items-center">
         {userHauls.length > 0 ? (
           userHauls.map((haul) => 
-            <HaulCard key={haul.id} haul={haul} />
+            <div key={haul.id} className="w-full flex items-center group">
+              <HaulCard haul={haul} />
+              {isOwnProfile &&
+                <div className="flex flex-col opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <Link to={`${haul.slug}/edit`} className="w-10 p-2 m-2 rounded-lg hover:bg-stone-200">
+                    <img src="/icons/edit.svg" alt="edit" />
+                  </Link>
+                  <Link to='/' className="w-10 p-2 m-2 rounded-lg hover:bg-stone-200">
+                    <img src="/icons/trash.svg" alt="delete" />
+                  </Link>
+                </div>
+              }
+            </div>
           )
         ) : (
           <p>No hauls found.</p>

@@ -59,9 +59,12 @@ const SignUp = () => {
       }
     } catch (err: any) {
       console.error(err.message);
-      if (err.errors) {
-        dispatch({ type: 'SET_ERRORS', errors: err.errors });
-      }
+
+      const errorMessages = err.errors
+        ? err.errors.map((error: { msg: string }) => error.msg)
+        : [err.message || 'An unexpected error occurred'];
+
+      dispatch({ type: 'SET_ERRORS', errors: errorMessages });
     }
   };
 

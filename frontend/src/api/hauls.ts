@@ -44,14 +44,13 @@ export const createHaul = async (formData: HaulFormData) => {
     const error = await response.json();
     throw error;
   }
-  console.log('haul formData:', formData);
   return response.json();
 };
 
-export const updateHaul = async (id: string, formData: HaulFormData) => {
+export const updateHaul = async (username: string, slug: string, formData: HaulFormData) => {
   const token = localStorage.getItem('token');
   const response = await fetch(
-    `${apiUrl}/api/hauls/${id}`,
+    `${apiUrl}/api/hauls/${username}/${slug}`,
     {
       method: 'PUT',
       headers: {

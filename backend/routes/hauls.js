@@ -9,10 +9,11 @@ router.get('/:username/:slug', controller.getHaulByUrl);
 router.post(
   '/',
   passport.authenticate('jwt', { session: false }),
+  upload,
   controller.createHaul
 );
 router.put(
-  '/:id',
+  '/:username/:slug',
   passport.authenticate('jwt', { session: false }),
   controller.updateHaul
 );

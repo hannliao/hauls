@@ -55,9 +55,13 @@ const Header = () => {
             />
             {isUserMenuOpen && (
               <div className="absolute top-12 right-2 flex flex-col text-stone-400 border-2 border-stone-200 bg-white">
-                <button className="p-2 px-6 hover:bg-stone-100 border-b-1 border-stone-200" onClick={toggleUserMenu} >
-                  <Link to={`${user.username}`}>@{user.username}</Link>
-                </button>
+                <Link
+                  to={`${user.username}`}
+                  className="p-2 px-6 hover:bg-stone-100 border-b-1 border-stone-200"
+                  onClick={toggleUserMenu}
+                >
+                  @{user.username}
+                </Link>
                 <button onClick={handleLogout} className="p-2 px-6 hover:bg-stone-100">Log out</button>
             </div>
             )}

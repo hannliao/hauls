@@ -3,13 +3,34 @@ import { Link } from "react-router";
 import { HaulCardProps } from "../types/haul";
 import { Item } from '../types/item';
 
-const HaulCard: React.FC<HaulCardProps> = ({ haul }) => {
-  const {dateOfPurchase, storeName, slug, username, items, notes} = haul;
+const HaulCard: React.FC<HaulCardProps> = ({ haul, showActions, toggleModal }) => {
+  const { id, dateOfPurchase, storeName, slug, username, items, notes } = haul;
   const formattedDate = format(dateOfPurchase, 'EEEE, MMM d');
+  
+  const handleDelete = () => {
+    if (toggleModal) {
+      toggleModal(id);
+    }
+  }
 
   return (
     <div className="w-full bg-white rounded-lg p-5 px-10 my-2">
-      <Link to={`/${username}`} className="font-semibold text-sm text-cyan-600 hover:underline">@{username}</Link>
+      <div className="flex justify-between items-center">
+        <Link to={`/${username}`} className="font-semibold text-sm text-cyan-600 hover:underline">@{username}</Link>
+        {showActions && (
+          <div className="flex opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <Link to={`${slug}/edit`} className="w-7 p-1 mr-3 rounded-lg hover:bg-stone-200">
+              <img src="/icons/edit.svg" alt="edit" />
+            </Link>
+            <button
+              onClick={handleDelete}
+              className="w-7 p-1 rounded-lg hover:bg-stone-200"
+            >
+              <img src="/icons/trash.svg" alt="delete"/>
+            </button>
+        </div>
+        )}
+      </div>
       <Link to={`/${username}/${slug}`}>
         <div className="flex justify-between">
           <h4 className="font-bold text-lg">{storeName}</h4>

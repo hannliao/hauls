@@ -44,7 +44,7 @@ model Haul {
 
 model Item {           // each item is specific to a haul, not a global list of items
   id          String   @id @default(uuid())
-  haul        Haul     @relation(fields: [haulId], references: [id])
+  haul        Haul     @relation(fields: [haulId], references: [id], onDelete: Cascade)
   haulId      String
   name        String
   quantity    Int      @default(1)

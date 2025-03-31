@@ -216,7 +216,7 @@ const EditHaulForm = () => {
   return (
     <div className="flex flex-col">
       <div className="w-full flex justify-start mb-4">
-        <Link to='/' className="flex space-x-2 p-2 px-4 rounded-lg hover:bg-stone-200">
+        <Link to={`/${user.username}`} className="flex space-x-2 p-2 px-4 rounded-lg hover:bg-stone-200">
           <img src="/icons/arrow-left.svg" alt="back" className="w-5" />
           <p className="font-medium text-lg">Back</p>
         </Link>

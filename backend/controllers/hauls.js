@@ -4,7 +4,15 @@ const uploadImages = require('../utils/uploadImages');
 
 exports.getHauls = async (req, res) => {
   try {
-    const allHauls = await prisma.haul.findMany({
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 5;
+    const skip = (page - 1) * limit;
+
+    const totalCount = await prisma.haul.count();
+
+    const hauls = await prisma.haul.findMany({
+      skip,
+      take: limit,
       orderBy: {
         dateOfPurchase: 'desc',
       },
@@ -12,7 +20,15 @@ exports.getHauls = async (req, res) => {
         items: true,
       },
     });
-    res.status(200).json(allHauls);
+    res.status(200).json({
+      hauls,
+      pagination: {
+        total: totalCount,
+        page,
+        limit,
+        pages: Math.ceil(totalCount / limit),
+      },
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

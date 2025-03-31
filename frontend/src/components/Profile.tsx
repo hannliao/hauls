@@ -22,7 +22,7 @@ const Profile = () => {
     haulId: null as string | null
   })
 
-  const { hauls, setHauls } = useContext(HaulContext);
+  const { hauls, setHauls, pagination, changePage } = useContext(HaulContext);
 
   const userHauls = hauls.filter((haul) => haul.username === username);
 
@@ -75,6 +75,11 @@ const Profile = () => {
     }
   }
 
+  const pageNumbers = [];
+  for (let i = 1; i <= pagination.pages; i++) {
+    pageNumbers.push(i);
+  }
+
   return (
     <div className="w-full max-w-4xl flex flex-col items-center">
       <div className="relative bg-white rounded-lg w-full max-h-fit p-8 m-10 flex flex-col justify-start items-center text-center">
@@ -101,15 +106,63 @@ const Profile = () => {
       <h2 className="place-self-start font-semibold text-xl mb-8">Recent Hauls</h2>
       <div className="w-full max-w-4xl flex flex-col items-center">
         {userHauls.length > 0 ? (
-          userHauls.map((haul) => 
-            <div key={haul.id} className="w-full flex items-center group">
-              <HaulCard
-                haul={haul}
-                showActions={isOwnProfile}
-                toggleModal={toggleModal}
-              />
+          <>
+            <div>
+              {userHauls.map((haul) => 
+                <div key={haul.id} className="w-full flex items-center group">
+                  <HaulCard
+                    haul={haul}
+                    showActions={isOwnProfile}
+                    toggleModal={toggleModal}
+                  />
+                </div>
+              )}
             </div>
-          )
+
+            {/* pagination controls */}
+            <div className="flex justify-center my-10">
+              <nav className="flex items-center">
+                <button
+                  onClick={() => changePage(pagination.page - 1)}
+                  disabled={pagination.page === 1}
+                  className={`px-3 py-1 mx-2 rounded bg-stone-200 ${
+                    pagination.page === 1
+                      ? 'cursor-not-allowed'
+                      : 'hover:bg-amber-400 hover:text-white'
+                  }`}
+                >
+                  prev
+                </button>
+
+                {pageNumbers.map((number) => (
+                  <button
+                    key={number}
+                    onClick={() => changePage(number)}
+                    className={`px-3 py-1 mx-1 rounded ${
+                      pagination.page === number
+                        ? 'bg-amber-500 text-white'
+                        : 'bg-amber-100 hover:bg-amber-200'
+                    }`}
+                  >
+                    {number}
+                  </button>
+                ))}
+
+                <button
+                  onClick={() => changePage(pagination.page + 1)}
+                  disabled={pagination.page === pagination.pages}
+                  className={`px-3 py-1 mx-2 rounded bg-stone-200 ${
+                    pagination.page === pagination.pages
+                      ? 'cursor-not-allowed'
+                      : 'hover:bg-amber-400 hover:text-white'
+                  }`}
+                >
+                  next
+                </button>
+              </nav>
+            </div>
+          </>
+          
         ) : (
           <p>No hauls found.</p>
         )}

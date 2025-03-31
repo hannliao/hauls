@@ -122,7 +122,7 @@ exports.updateHaul = async (req, res) => {
 
 exports.deleteHaul = async (req, res) => {
   try {
-    const haulId = parseInt(req.params.id, 10);
+    const haulId = req.params.id;
     await prisma.haul.delete({
       where: { id: haulId },
     });

@@ -33,4 +33,12 @@ export interface HaulFormData {
 
 export interface HaulCardProps {
   haul: Haul;
+  showActions?: boolean;
+  toggleModal?: (haulId: string | null) => void;
+}
+
+export interface DeleteHaulModalProps {
+  onCancel: () => void;
+  onDelete: () => void;
+  isModalVisible: boolean;
 }

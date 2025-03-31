@@ -22,7 +22,7 @@ const Profile = () => {
     haulId: null as string | null
   })
 
-  const { hauls, setHauls } = useContext(HaulContext);
+  const { hauls, setHauls, pagination, changePage } = useContext(HaulContext);
 
   const userHauls = hauls.filter((haul) => haul.username === username);
 
@@ -45,35 +45,6 @@ const Profile = () => {
   }
 
   const isOwnProfile = loggedInUser?.username == profileUser.username;
-
-  const toggleModal = (haulId: string | null = null) => {
-    if (haulId) {
-      setModalState({
-        isVisible: true,
-        haulId: haulId
-      })
-    } else { 
-      setModalState({
-        isVisible: false,
-        haulId: null
-      })
-    }
-  }
-  const handleDelete = async () => {
-    const {haulId} = modalState;
-    if (!haulId) return;
-
-    try {
-      await deleteHaul(haulId);
-      setHauls(hauls.filter((h) => h.id !== haulId));
-      setModalState({
-        isVisible: false,
-        haulId: null
-      })
-    } catch (error) {
-      console.error('Failed to delete haul:', error);
-    }
-  }
 
   return (
     <div className="w-full max-w-4xl flex flex-col items-center">
@@ -103,11 +74,17 @@ const Profile = () => {
         {userHauls.length > 0 ? (
           userHauls.map((haul) => 
             <div key={haul.id} className="w-full flex items-center group">
-              <HaulCard
-                haul={haul}
-                showActions={isOwnProfile}
-                toggleModal={toggleModal}
-              />
+              <HaulCard haul={haul} />
+              {isOwnProfile &&
+                <div className="flex flex-col opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <Link to={`${haul.slug}/edit`} className="w-10 p-2 m-2 rounded-lg hover:bg-stone-200">
+                    <img src="/icons/edit.svg" alt="edit" />
+                  </Link>
+                  <Link to='/' className="w-10 p-2 m-2 rounded-lg hover:bg-stone-200">
+                    <img src="/icons/trash.svg" alt="delete" />
+                  </Link>
+                </div>
+              }
             </div>
           )
         ) : (

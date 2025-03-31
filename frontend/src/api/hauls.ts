@@ -1,9 +1,9 @@
 const apiUrl = import.meta.env.VITE_API_URL;
 import { HaulFormData } from "../types/haul";
 
-export const getHauls = async () => {
+export const getHauls = async (page = 1, limit = 5) => {
   const response = await fetch(
-    `${apiUrl}/api/hauls`
+    `${apiUrl}/api/hauls?page=${page}&limit=${limit}`
   );
 
   if (!response.ok) {

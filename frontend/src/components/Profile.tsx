@@ -84,7 +84,7 @@ const Profile = () => {
     <div className="w-full max-w-4xl flex flex-col items-center">
       <div className="relative bg-white rounded-lg w-full max-h-fit p-8 m-10 flex flex-col justify-start items-center text-center">
           <h2 className="font-bold text-3xl">{profileUser.firstName} {profileUser.lastName}</h2>
-          <h3 className="text-lg text-cyan-600">@{profileUser.username}</h3>
+          <h3 className="text-lg text-blue-500">@{profileUser.username}</h3>
           {profileUser.bio && (
             <p className="max-w-xl my-2 whitespace-pre-line">{profileUser.bio}</p>
           )}
@@ -107,7 +107,7 @@ const Profile = () => {
       <div className="w-full max-w-4xl flex flex-col items-center">
         {userHauls.length > 0 ? (
           <>
-            <div>
+            <div className="w-full">
               {userHauls.map((haul) => 
                 <div key={haul.id} className="w-full flex items-center group">
                   <HaulCard
@@ -128,7 +128,7 @@ const Profile = () => {
                   className={`px-3 py-1 mx-2 rounded bg-stone-200 ${
                     pagination.page === 1
                       ? 'cursor-not-allowed'
-                      : 'hover:bg-amber-400 hover:text-white'
+                      : 'hover:bg-stone-300'
                   }`}
                 >
                   prev
@@ -154,7 +154,7 @@ const Profile = () => {
                   className={`px-3 py-1 mx-2 rounded bg-stone-200 ${
                     pagination.page === pagination.pages
                       ? 'cursor-not-allowed'
-                      : 'hover:bg-amber-400 hover:text-white'
+                      : 'hover:bg-stone-300'
                   }`}
                 >
                   next

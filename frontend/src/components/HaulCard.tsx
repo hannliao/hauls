@@ -16,7 +16,7 @@ const HaulCard: React.FC<HaulCardProps> = ({ haul, showActions, toggleModal }) =
   return (
     <div className="w-full bg-white rounded-lg p-5 px-10 my-2">
       <div className="flex justify-between items-center">
-        <Link to={`/${username}`} className="font-semibold text-sm text-cyan-600 hover:underline">@{username}</Link>
+        <Link to={`/${username}`} className="font-semibold text-sm text-blue-500 hover:underline">@{username}</Link>
         {showActions && (
           <div className="flex opacity-0 group-hover:opacity-100 transition-opacity duration-200">
             <Link to={`${slug}/edit`} className="w-7 p-1 mr-3 rounded-lg hover:bg-stone-200">

@@ -165,7 +165,7 @@ const EditProfileForm = () => {
 
         <button
           type="submit"
-          className="w-full bg-lime-700 hover:bg-lime-600 rounded-full p-3 mt-5 text-white font-semibold"
+          className="w-full bg-blue-500 hover:bg-blue-400 rounded-full p-3 mt-5 text-white font-semibold"
         >
           Save Changes
         </button>

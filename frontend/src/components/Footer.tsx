@@ -4,7 +4,7 @@ const Footer = () => {
       &copy; 2024&ensp;
       <a
         href="https://github.com/hannliao/hauls"
-        className="text-sky-700 underline"
+        className="text-blue-600 underline"
       >
         Hannah Liao
       </a>

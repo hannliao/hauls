@@ -21,9 +21,9 @@ const ItemInput: React.FC<ItemInputProps> = ({
     <div className="flex items-center">
       <button 
         type="button" 
-        className={`border-1 hover:text-lime-600 hover:border-lime-600 rounded-full p-1 px-4 m-2 text-sm
+        className={`border-1 hover:text-rose-400 hover:border-rose-400 rounded-full p-1 px-4 m-2 text-sm
           ${item.recommended 
-          ? 'text-lime-600 border-lime-600'
+          ? 'text-rose-300 border-rose-300'
           : 'text-stone-400 border-stone-400'}`}
         name="recommended"
         onClick={() => onToggle('recommended', index)}
@@ -33,7 +33,7 @@ const ItemInput: React.FC<ItemInputProps> = ({
 
       <button
         type="button"
-        className={`border-1 hover:text-amber-400 hover:border-amber-400 rounded-full p-1 px-4 m-2 text-sm
+        className={`border-1 hover:text-amber-500 hover:border-amber-500 rounded-full p-1 px-4 m-2 text-sm
         ${item.onSale
           ? 'text-amber-400 border-amber-400'
           : 'text-stone-400 border-stone-400'}`}

@@ -39,7 +39,7 @@ const Home = () => {
                 className={`px-3 py-1 mx-2 rounded bg-stone-200 ${
                   pagination.page === 1
                     ? 'cursor-not-allowed'
-                    : 'hover:bg-amber-400 hover:text-white'
+                    : 'hover:bg-stone-300'
                 }`}
               >
                 prev
@@ -65,7 +65,7 @@ const Home = () => {
                 className={`px-3 py-1 mx-2 rounded bg-stone-200 ${
                   pagination.page === pagination.pages
                     ? 'cursor-not-allowed'
-                    : 'hover:bg-amber-400 hover:text-white'
+                    : 'hover:bg-stone-300'
                 }`}
               >
                 next

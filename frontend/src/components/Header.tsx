@@ -40,7 +40,7 @@ const Header = () => {
   return (
     <header className="sticky bg-white w-full flex justify-between items-center p-2 px-6">
       <Link to="/">
-        <h1 className="font-bold text-3xl p-2 hover:text-lime-600">
+        <h1 className="font-bold text-3xl p-2 hover:text-amber-400">
           hauls
         </h1>
       </Link>
@@ -54,15 +54,15 @@ const Header = () => {
               onClick={toggleUserMenu}
             />
             {isUserMenuOpen && (
-              <div className="absolute top-12 right-2 flex flex-col text-stone-400 border-2 border-stone-200 bg-white">
+              <div className="absolute top-12 right-2 flex flex-col text-stone-600 rounded border-1 border-stone-200 shadow-sm bg-white">
                 <Link
                   to={`${user.username}`}
-                  className="p-2 px-6 hover:bg-stone-100 border-b-1 border-stone-200"
+                  className="p-2 px-6 hover:bg-amber-100 border-b-1 border-stone-200"
                   onClick={toggleUserMenu}
                 >
                   @{user.username}
                 </Link>
-                <button onClick={handleLogout} className="p-2 px-6 hover:bg-stone-100">Log out</button>
+                <button onClick={handleLogout} className="p-2 px-6 hover:bg-amber-100">Log out</button>
             </div>
             )}
           </div>

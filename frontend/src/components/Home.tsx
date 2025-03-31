@@ -4,6 +4,7 @@ import useHauls from '../hooks/useHauls';
 
 const Home = () => {
   const { hauls, loading, error, pagination, changePage } = useHauls();
+  const { hauls, loading, error, pagination, changePage } = useHauls();
 
   if (loading) {
     return <div>Loading...</div>;
@@ -11,6 +12,11 @@ const Home = () => {
 
   if (error) {
     return <div>{error}</div>;
+  }
+
+  const pageNumbers = [];
+  for (let i = 1; i <= pagination.pages; i++) {
+    pageNumbers.push(i);
   }
 
   const pageNumbers = [];

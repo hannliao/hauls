@@ -14,20 +14,25 @@ const HaulDetails = () => {
     const fetchHaul = async () => {
       try {
         if (!username || !slug) {
-          setError('Haul not found.');
           return;
         }
         const data = await getHaulByUrl(username, slug);
         setHaul(data.haul);
+        setError('');
       } catch (err) {
         console.error('Error fetching haul:', err);
+        setError('Haul not found.')
       }
     }
     fetchHaul();
   }, [username, slug]);
 
+  if (error) {
+    return <div className="place-self-center flex justify-center items-center text-xl">{error}</div>
+  }
+
   if (!haul) {
-    return <div className="flex-1 flex justify-center items-center text-2xl">Loading...</div>
+    return <div className="place-self-center flex justify-center items-center text-xl">Loading...</div>
   }
 
   const formattedDate = format(haul.dateOfPurchase, 'EEEE, MMM d');

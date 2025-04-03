@@ -21,6 +21,7 @@ const Profile = () => {
     isVisible: false,
     haulId: null as string | null
   })
+  const [error, setError] = useState<String>('');
 
   const { hauls, setHauls, pagination, changePage } = useContext(HaulContext);
 
@@ -31,17 +32,23 @@ const Profile = () => {
       try {
         if (username) {
           const fetchedUser = await getUserByUsername(username);
-          setProfileUser(fetchedUser.user)
+          setProfileUser(fetchedUser.user);
+          setError('');
         }
       } catch (err) {
         console.error('Error fetching user profile:', err);
+        setError('User not found.')
       }
     };
     fetchProfileUser();
   }, [username]);
 
+  if (error) {
+    return <div className="place-self-center flex justify-center items-center text-xl">{error}</div>
+  }
+
   if (!profileUser) {
-    return <div className="flex-1 flex justify-center items-center text-2xl">Loading...</div>
+    return <div className="place-self-center flex justify-center items-center text-xl">Loading...</div>
   }
 
   const isOwnProfile = loggedInUser?.username == profileUser.username;

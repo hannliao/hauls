@@ -67,7 +67,7 @@ const NewHaulForm = () => {
   }, [user, loading, navigate]);
 
   if (loading) {
-    return <div className="flex-1 flex justify-center items-center text-2xl">Loading...</div>
+    return <div className="place-self-center flex justify-center items-center text-xl">Loading...</div>
   }
 
   if (!user) {

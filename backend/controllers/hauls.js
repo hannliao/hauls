@@ -1,5 +1,6 @@
 const prisma = require('../prisma/seed');
-const slugify = require('../utils/slugify');
+const generateSlug = require('../utils/generateSlug');
+const saveDateUTC = require('../utils/saveDateUTC');
 const uploadImages = require('../utils/uploadImages');
 
 exports.getHauls = async (req, res) => {
@@ -61,12 +62,14 @@ exports.createHaul = [
       if (!req.user || !req.user.id) {
         return res.status(401).json({ error: 'Unauthorized: User not found' });
       }
+
       const { dateOfPurchase, storeName, notes, items } = req.body;
-      const slug = slugify(dateOfPurchase, storeName);
+      const utcDateAtNoon = saveDateUTC(dateOfPurchase);
+      const slug = await generateSlug(req.user.id, utcDateAtNoon, storeName);
 
       const haul = await prisma.haul.create({
         data: {
-          dateOfPurchase,
+          dateOfPurchase: utcDateAtNoon,
           storeName,
           slug,
           notes,
@@ -90,12 +93,6 @@ exports.createHaul = [
       });
       return res.status(201).json({ message: 'haul saved', haul });
     } catch (err) {
-      if (err.code === 'P2002') {
-        res.status(400).json({
-          error:
-            'A haul with this store and date already exists for this user. Please change the store name (e.g. Costco #2).',
-        });
-      }
       return res.status(500).json({ error: err.message });
     }
   },
@@ -106,12 +103,13 @@ exports.updateHaul = async (req, res) => {
     const { username, slug } = req.params;
     const { dateOfPurchase, storeName, notes, images, userId, items } =
       req.body;
-    const newSlug = slugify(dateOfPurchase, storeName);
+    const utcDateAtNoon = saveDateUTC(dateOfPurchase);
+    const newSlug = await generateSlug(req.user.id, dateOfPurchase, storeName);
 
     const haul = await prisma.haul.update({
       where: { username, slug },
       data: {
-        dateOfPurchase,
+        dateOfPurchase: utcDateAtNoon,
         storeName,
         slug: newSlug,
         notes,

@@ -78,7 +78,7 @@ const SignUp = () => {
       {errors.length > 0 && (
         <div>
           {errors.map((error, index) => (
-            <p key={index} className="text-red-600 my-2">
+            <p key={index} className="text-red-600 my-2" data-testid="error-message">
               {error}
             </p>
           ))}

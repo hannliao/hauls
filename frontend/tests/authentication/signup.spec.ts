@@ -50,6 +50,7 @@ test.describe('Sign Up Page', () => {
     await page.locator('input[name="username"]').fill(CREDENTIALS.invalid.username);
     await page.locator('input[name="password"]').fill(CREDENTIALS.invalid.password);
     await page.locator('input[name="confirmPwd"]').fill(CREDENTIALS.valid.password);
+    await page.getByRole('button', { name: 'Sign Up' }).click();
 
     await test.step('verify error messages', async () => {
       const errorMessages = page.getByTestId('error-message');

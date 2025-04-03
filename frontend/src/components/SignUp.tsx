@@ -145,7 +145,7 @@ const SignUp = () => {
           onChange={handleChange}
           required
         />
-        <button className="bg-blue-500 hover:bg-blue-400 rounded-full p-2 mt-5 text-white">
+        <button type="submit" className="bg-blue-500 hover:bg-blue-400 rounded-full p-2 mt-5 text-white">
           Sign Up
         </button>
       </form>

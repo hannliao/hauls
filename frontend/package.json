@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "start:servers": "concurrently \"node ../backend/app.js\" \"npm run dev\"",
-    "test": "npm run start:servers && npx playwright test --ui"
+    "test": "concurrently -k \"npm run start:servers\" \"npx playwright test --ui\"",
+    "codegen": "concurrently -k \"npm run start:servers\" \"npx playwright codegen http://localhost:5173\""
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.7",

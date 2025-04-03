@@ -9,6 +9,15 @@ function App() {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
+    const currentPath = window.location.pathname;
+    const protectedPatterns = ['/new', '/edit'];
+    const isProtectedRoute = protectedPatterns.some(pattern => currentPath.includes(pattern));
+
+    if (!token && isProtectedRoute) {
+      navigate('/login');
+      return;
+    }
+    
     if (token) {
       try {
         const decoded: any = jwtDecode(token);
@@ -16,15 +25,17 @@ function App() {
 
         if (decoded.exp < currentTime) {
           localStorage.removeItem('token');
-          navigate('/login');
+          if (isProtectedRoute) {
+            navigate('/login');
+          }     
         }
       } catch (error) {
         console.error('Invalid token:', error);
         localStorage.removeItem('token');
-        navigate('/login');
+        if (isProtectedRoute) {
+          navigate('/login');
+        }
       }
-    } else {
-      navigate('/login');
     }
   }, [navigate]);
 

@@ -49,7 +49,7 @@ const Header = () => {
           <div className="relative" ref={userMenuRef}>
             <img
               src="/icons/person-circle.svg"
-              alt="dashboard"
+              alt="profile"
               className="w-12 hover:cursor-pointer"
               onClick={toggleUserMenu}
             />
@@ -70,7 +70,7 @@ const Header = () => {
           <Link to="/login">
             <img
               src="/icons/person-circle.svg"
-              alt="dashboard"
+              alt="profile"
               className="w-12"
             />
           </Link>

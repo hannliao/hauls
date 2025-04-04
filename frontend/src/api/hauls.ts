@@ -13,6 +13,19 @@ export const getHauls = async (page = 1, limit = 5) => {
   return response.json();
 };
 
+export const getUserHauls = async (username: string, page = 1, limit = 5) => {
+  const response = await fetch(`${apiUrl}/api/hauls/user/${username}?page=${page}&limit=${limit}`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch user hauls');
+  }
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw error;
+  }
+  return response.json();
+}
+
 export const getHaulByUrl = async (username: string, slug: string) => {
   const response = await fetch(
     `${apiUrl}/api/hauls/${username}/${slug}`

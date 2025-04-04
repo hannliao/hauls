@@ -145,7 +145,7 @@ const SignUp = () => {
           onChange={handleChange}
           required
         />
-        <button type="submit" className="bg-blue-500 hover:bg-blue-400 rounded-full p-2 mt-5 text-white">
+        <button type="submit" className="bg-cyan-500 hover:bg-cyan-400 rounded-full p-2 mt-5 text-white font-semibold">
           Sign Up
         </button>
       </form>
@@ -153,7 +153,7 @@ const SignUp = () => {
         Already have an account?{' '}
         <Link
           to="/login"
-          className="text-blue-500 hover:text-blue-400 underline"
+          className="text-cyan-500 hover:text-cyan-400 underline"
         >
           Log In
         </Link>

@@ -248,7 +248,7 @@ const NewHaulForm = () => {
         
         <button
           type="submit" 
-          className="w-full bg-blue-500 hover:bg-blue-400 rounded-full p-3 mt-5 text-white font-semibold"
+          className="w-full bg-cyan-500 hover:bg-cyan-400 rounded-full p-3 mt-5 text-white font-semibold"
         >
           Upload
         </button>

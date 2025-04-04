@@ -5,6 +5,7 @@ const passport = require('../auth/passport');
 const upload = require('../utils/multer');
 
 router.get('/', controller.getHauls);
+router.get('/user/:username', controller.getUserHauls);
 router.get('/:username/:slug', controller.getHaulByUrl);
 router.post(
   '/',

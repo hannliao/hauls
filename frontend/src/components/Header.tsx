@@ -57,12 +57,12 @@ const Header = () => {
               <div className="absolute top-12 right-2 flex flex-col text-stone-600 rounded border-1 border-stone-200 shadow-sm bg-white">
                 <Link
                   to={`${user.username}`}
-                  className="p-2 px-6 hover:bg-amber-100 border-b-1 border-stone-200"
+                  className="p-2 px-6 hover:bg-slate-100 border-b-1 border-stone-200"
                   onClick={toggleUserMenu}
                 >
                   @{user.username}
                 </Link>
-                <button onClick={handleLogout} className="p-2 px-6 hover:bg-amber-100">Log out</button>
+                <button onClick={handleLogout} className="p-2 px-6 hover:bg-slate-100">Log out</button>
             </div>
             )}
           </div>

@@ -20,6 +20,12 @@
   button {
     cursor: pointer;
   }
+
+  input,
+  textarea,
+  select {
+    @apply focus:outline-cyan-700;
+  }
 }
 
 @theme {

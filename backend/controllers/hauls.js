@@ -35,6 +35,42 @@ exports.getHauls = async (req, res) => {
   }
 };
 
+exports.getUserHauls = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 5;
+    const skip = (page - 1) * limit;
+
+    const totalCount = await prisma.haul.count({
+      where: { username },
+    });
+
+    const hauls = await prisma.haul.findMany({
+      where: { username },
+      skip,
+      take: limit,
+      orderBy: {
+        dateOfPurchase: 'desc',
+      },
+      include: {
+        items: true,
+      },
+    });
+    res.status(200).json({
+      hauls,
+      pagination: {
+        total: totalCount,
+        page,
+        limit,
+        pages: Math.ceil(totalCount / limit),
+      },
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 exports.getHaulByUrl = async (req, res) => {
   try {
     const { username, slug } = req.params;

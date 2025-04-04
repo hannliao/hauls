@@ -46,7 +46,7 @@ const HaulDetails = () => {
         </Link>
       </div>
       <div className="w-full bg-white rounded-lg p-5 px-10 my-2">
-        <Link to={`/${username}`} className="font-semibold text-blue-500 hover:underline">@{username}</Link>
+        <Link to={`/${username}`} className="font-semibold text-cyan-600 hover:underline">@{username}</Link>
         <div className="flex flex-col">
           <div className="flex justify-between items-center">
             <h4 className="font-bold text-2xl">{haul.storeName}</h4>

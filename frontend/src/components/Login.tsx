@@ -86,7 +86,7 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit" className="bg-blue-500 hover:bg-blue-400 rounded-full p-2 mt-5 text-white">
+        <button type="submit" className="bg-cyan-500 hover:bg-cyan-400 rounded-full p-2 mt-5 text-white font-semibold">
           Log In
         </button>
       </form>
@@ -94,7 +94,7 @@ const Login = () => {
         Don't have an account yet?{' '}
         <Link
           to="/signup"
-          className="text-blue-500 hover:text-blue-400 underline"
+          className="text-cyan-500 hover:text-cyan-400 underline"
         >
           Sign Up
         </Link>

@@ -1,6 +1,7 @@
 import { Link } from 'react-router';
 import HaulCard from './HaulCard';
 import useHauls from '../hooks/useHauls';
+import Pagination from './Pagination';
 
 const Home = () => {
   const { hauls, loading, error, pagination, changePage } = useHauls();
@@ -11,11 +12,6 @@ const Home = () => {
 
   if (error) {
     return <div>{error}</div>;
-  }
-
-  const pageNumbers = [];
-  for (let i = 1; i <= pagination.pages; i++) {
-    pageNumbers.push(i);
   }
 
   return (
@@ -30,48 +26,7 @@ const Home = () => {
             ))}
           </div>
 
-          {/* pagination controls */}
-          <div className="flex justify-center my-10">
-            <nav className="flex items-center">
-              <button
-                onClick={() => changePage(pagination.page - 1)}
-                disabled={pagination.page === 1}
-                className={`px-3 py-1 mx-2 rounded bg-stone-200 ${
-                  pagination.page === 1
-                    ? 'cursor-not-allowed'
-                    : 'hover:bg-stone-300'
-                }`}
-              >
-                prev
-              </button>
-
-              {pageNumbers.map((number) => (
-                <button
-                  key={number}
-                  onClick={() => changePage(number)}
-                  className={`px-3 py-1 mx-1 rounded ${
-                    pagination.page === number
-                      ? 'bg-amber-500 text-white'
-                      : 'bg-amber-100 hover:bg-amber-200'
-                  }`}
-                >
-                  {number}
-                </button>
-              ))}
-
-              <button
-                onClick={() => changePage(pagination.page + 1)}
-                disabled={pagination.page === pagination.pages}
-                className={`px-3 py-1 mx-2 rounded bg-stone-200 ${
-                  pagination.page === pagination.pages
-                    ? 'cursor-not-allowed'
-                    : 'hover:bg-stone-300'
-                }`}
-              >
-                next
-              </button>
-            </nav>
-          </div>
+          <Pagination pagination={pagination} changePage={changePage} />
         </>
       ) : (
         <p>No hauls found.</p>

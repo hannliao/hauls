@@ -3,10 +3,11 @@ import { Link, useParams } from 'react-router'
 import { UserContext } from '../contexts/UserContext';
 import { User } from '../types/user';
 import { getUserByUsername } from '../api/user';
-import { HaulContext } from '../contexts/HaulContext';
 import HaulCard from './HaulCard';
 import { deleteHaul } from '../api/hauls';
 import DeleteHaulModal from './DeleteHaulModal';
+import Pagination from './Pagination';
+import useUserHauls from '../hooks/useUserHauls';
 
 const Profile = () => {
   const context = useContext(UserContext);
@@ -23,9 +24,12 @@ const Profile = () => {
   })
   const [error, setError] = useState<String>('');
 
-  const { hauls, setHauls, pagination, changePage } = useContext(HaulContext);
-
-  const userHauls = hauls.filter((haul) => haul.username === username);
+  const {
+    hauls: userHauls,
+    setHauls: setUserHauls,
+    pagination, 
+    changePage
+  } = useUserHauls(username);
 
   useEffect(() => {
     const fetchProfileUser = async () => {
@@ -72,7 +76,7 @@ const Profile = () => {
 
     try {
       await deleteHaul(haulId);
-      setHauls(hauls.filter((h) => h.id !== haulId));
+      setUserHauls(userHauls.filter((h) => h.id !== haulId));
       setModalState({
         isVisible: false,
         haulId: null
@@ -82,16 +86,11 @@ const Profile = () => {
     }
   }
 
-  const pageNumbers = [];
-  for (let i = 1; i <= pagination.pages; i++) {
-    pageNumbers.push(i);
-  }
-
   return (
     <div className="w-full max-w-4xl flex flex-col items-center">
       <div className="relative bg-white rounded-lg w-full max-h-fit p-8 m-10 flex flex-col justify-start items-center text-center">
           <h2 className="font-bold text-3xl">{profileUser.firstName} {profileUser.lastName}</h2>
-          <h3 className="text-lg text-blue-500">@{profileUser.username}</h3>
+          <h3 className="text-lg">@{profileUser.username}</h3>
           {profileUser.bio && (
             <p className="max-w-xl my-2 whitespace-pre-line">{profileUser.bio}</p>
           )}
@@ -126,48 +125,7 @@ const Profile = () => {
               )}
             </div>
 
-            {/* pagination controls */}
-            <div className="flex justify-center my-10">
-              <nav className="flex items-center">
-                <button
-                  onClick={() => changePage(pagination.page - 1)}
-                  disabled={pagination.page === 1}
-                  className={`px-3 py-1 mx-2 rounded bg-stone-200 ${
-                    pagination.page === 1
-                      ? 'cursor-not-allowed'
-                      : 'hover:bg-stone-300'
-                  }`}
-                >
-                  prev
-                </button>
-
-                {pageNumbers.map((number) => (
-                  <button
-                    key={number}
-                    onClick={() => changePage(number)}
-                    className={`px-3 py-1 mx-1 rounded ${
-                      pagination.page === number
-                        ? 'bg-amber-500 text-white'
-                        : 'bg-amber-100 hover:bg-amber-200'
-                    }`}
-                  >
-                    {number}
-                  </button>
-                ))}
-
-                <button
-                  onClick={() => changePage(pagination.page + 1)}
-                  disabled={pagination.page === pagination.pages}
-                  className={`px-3 py-1 mx-2 rounded bg-stone-200 ${
-                    pagination.page === pagination.pages
-                      ? 'cursor-not-allowed'
-                      : 'hover:bg-stone-300'
-                  }`}
-                >
-                  next
-                </button>
-              </nav>
-            </div>
+            <Pagination pagination={pagination} changePage={changePage} />
           </>
           
         ) : (

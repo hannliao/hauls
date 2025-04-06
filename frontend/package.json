@@ -11,6 +11,7 @@
     "start:servers": "concurrently \"node ../backend/app.js\" \"npm run dev\"",
     "test": "concurrently -k \"npm run start:servers\" \"npx playwright test --ui\"",
     "test:e2e": "playwright test",
+    "test:ci": "vite preview --port 5173 & playwright test",
     "codegen": "concurrently -k \"npm run start:servers\" \"npx playwright codegen http://localhost:5173\""
   },
   "dependencies": {

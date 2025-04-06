@@ -1,13 +1,12 @@
 # hauls
 
-I don't care what you're _planning_ on getting at the grocery store - I want to know what you actually got. Share your grocery haul!
+Share your grocery haul!
 
 Status: In Progress
 
-Here's what it looks like so far!
 ![Image](https://github.com/user-attachments/assets/e9275e38-289c-4ed0-a4a4-93599726eb94)
 
-Last Updated: 03/17/2025
+Last Updated: 04/05/2025
 
 ## Features
 

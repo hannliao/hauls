@@ -15,9 +15,7 @@ jobs:
           node-version: lts/*
 
       - name: Install backend dependencies
-        run: |
-          npm install proxy-addr --no-save
-          npm install
+        run: npm ci
         working-directory: backend
 
       - name: Install frontend dependencies

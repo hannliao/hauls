@@ -15,10 +15,12 @@ jobs:
           node-version: lts/*
 
       - name: Install backend dependencies
-        run: npm ci
+        run: |
+          npm clean cache --force
+          npm ci
         working-directory: backend
 
-      - name: Install dependencies
+      - name: Install frontend dependencies
         run: npm ci
         working-directory: frontend
 

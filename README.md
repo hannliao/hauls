@@ -13,7 +13,8 @@ Last Updated: 04/05/2025
 - **User Authentication**
   - Securely sign up, log in, and log out.
 - **Grocery Hauls**
-  - Input items with prices and quantities.
+  - Add date of purchase, store, notes, and items.
+  - For each item, set name, price, and quantity.
   - Tag items as "recommended" or "on sale".
   - Optionally upload receipt images and add notes.
 - **Display & Search**
@@ -23,3 +24,19 @@ Last Updated: 04/05/2025
   - Search for user profiles.
 - **Community Interaction**
   - Comment and reply on grocery hauls.
+
+## Testing (Playwright)
+
+- **Authentication**
+  - Log In page
+  - Sign Up page
+- **Homepage**
+  - Header
+  - Navigation
+- **Posts**
+  - Create a haul
+  - Edit a haul
+  - Delete a haul
+- **Profile**
+  - View profile
+  - Edit profile

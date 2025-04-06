@@ -16,8 +16,8 @@ jobs:
 
       - name: Install backend dependencies
         run: |
-          npm cache clean --force
-          npm ci
+          npm install proxy-addr --no-save
+          npm install
         working-directory: backend
 
       - name: Install frontend dependencies
@@ -33,7 +33,10 @@ jobs:
         working-directory: backend
 
       - name: Run Playwright tests
-        run: npm run test:ci
+        run: |
+          npm run build
+          npm run preview -- --port 5173 &
+          npx playwright test
         working-directory: frontend
         env:
           CI: true

@@ -1,17 +1,5 @@
 import { test, expect } from '@playwright/test';
-
-const CREDENTIALS = {
-  valid: {
-    firstName: 'test',
-    lastName: 'account',
-    username: `tester_${Date.now()}`,
-    password: 'hello123',
-  },
-  invalid: {
-    username: 'tester',
-    password: 'a',
-  },
-} as const;
+import { CREDENTIALS } from '../utils/constants'
 
 test.describe('Sign Up Page', () => {
   test.beforeEach(async ({ page }) => {
@@ -47,9 +35,9 @@ test.describe('Sign Up Page', () => {
   test('should not sign up with invalid credentials', async ({ page }) => {
     await page.locator('input[name="firstName"]').fill(CREDENTIALS.valid.firstName);
     await page.locator('input[name="lastName"]').fill(CREDENTIALS.valid.lastName);
-    await page.locator('input[name="username"]').fill(CREDENTIALS.invalid.username);
-    await page.locator('input[name="password"]').fill(CREDENTIALS.invalid.password);
-    await page.locator('input[name="confirmPwd"]').fill(CREDENTIALS.valid.password);
+    await page.locator('input[name="username"]').fill(CREDENTIALS.invalid.existingUsername);
+    await page.locator('input[name="password"]').fill(CREDENTIALS.invalid.shortPwd);
+    await page.locator('input[name="confirmPwd"]').fill(CREDENTIALS.invalid.password);
     await page.getByRole('button', { name: 'Sign Up' }).click();
 
     await test.step('verify error messages', async () => {

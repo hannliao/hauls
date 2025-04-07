@@ -1,20 +1,10 @@
 import { test, expect, Page } from '@playwright/test';
+import { CREDENTIALS } from '../utils/constants'
 
 interface LoginCredentials {
   username: string;
   password: string;
 }
-
-const CREDENTIALS = {
-  valid: {
-    username: 'tester',
-    password: 'hello123',
-  },
-  invalid: {
-    username: 'nottester',
-    password: 'nothello123',
-  },
- } as const;
 
 test.describe('Log In Page', () => {
   test.beforeEach(async ({ page }) => {

@@ -1,14 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { login } from '../utils/auth';
-
-test.beforeEach(async ({ page }) => {
-  await login(page);
-});
-
-const USER = {
-  username: 'tester',
-  name: 'test account',
-} as const;
+import { test, expect } from '../fixtures';
+import { CREDENTIALS } from '../utils/constants';
 
 test.describe('Header', () => {
   test('should have heading', async ({ page }) => {
@@ -17,9 +8,9 @@ test.describe('Header', () => {
     await expect(header).toBeVisible();
   });
 
-  test('profile icon should open menu with username and Log out', async ({ page }) => {
+  test('profile icon should open menu when logged in', async ({ page }) => {
     await page.getByRole('img', { name: 'profile' }).click();
-    const profileLink = page.getByRole('banner').getByRole('link', { name: `@${USER.username}` });
+    const profileLink = page.getByRole('banner').getByRole('link', { name: `@${CREDENTIALS.valid.username}` });
     const logoutButton = page.getByRole('button', { name: 'Log out' });
 
     await expect(profileLink).toBeVisible();
@@ -29,10 +20,10 @@ test.describe('Header', () => {
   test('username should navigate to user profile page', async ({ page }) => {
     await page.getByRole('img', { name: 'profile' }).click();
 
-    const profileLink = page.getByRole('banner').getByRole('link', { name: `@${USER.username}` });
+    const profileLink = page.getByRole('banner').getByRole('link', { name: `@${CREDENTIALS.valid.username}` });
     await profileLink.click();
 
-    await expect(page).toHaveURL(`/${USER.username}`);
+    await expect(page).toHaveURL(`/${CREDENTIALS.valid.username}`);
     await expect(page.getByRole('heading', { name: 'test account' })).toBeVisible();
   });
 
@@ -43,4 +34,3 @@ test.describe('Header', () => {
     await expect(page).toHaveURL('/login');
   });
 })
-

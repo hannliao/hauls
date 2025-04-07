@@ -1,10 +1,11 @@
 const timestamp = Date.now();
 
-export const CREDENTIALS = {
+export const credentials = {
   valid: {
     firstName: 'test',
     lastName: 'account',
-    username: `tester_${timestamp}`,
+    username: 'tester',
+    datedUsername: `tester_${timestamp}`,
     password: 'hello123',
   },
   invalid: {
@@ -13,4 +14,4 @@ export const CREDENTIALS = {
     password: 'nothello123',
     shortPwd: 'a',
   },
- } as const;
+ };

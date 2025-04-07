@@ -1,5 +1,5 @@
 import { Page, test as base } from '@playwright/test';
-import { CREDENTIALS } from './utils/constants';
+import { credentials } from './data/credentials';
 
 type Fixtures = {
   page: Page;
@@ -8,8 +8,8 @@ type Fixtures = {
 export const test = base.extend<Fixtures>({
   page: async ({ page }, use) => {
     await page.goto('login');
-    await page.locator('input[name="username"]').fill(CREDENTIALS.valid.username);
-    await page.locator('input[name="password"]').fill(CREDENTIALS.valid.password);
+    await page.locator('input[name="username"]').fill(credentials.valid.username);
+    await page.locator('input[name="password"]').fill(credentials.valid.password);
     await page.getByRole('button', { name: 'Log In' }).click();
     await page.waitForURL('/');
     await use(page);

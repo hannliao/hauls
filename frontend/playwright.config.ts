@@ -37,6 +37,18 @@ export default defineConfig({
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
     },
+    {
+      name: 'smoke',
+      grep: /@smoke/,
+    },
+    {
+      name: 'regression',
+      grep: /@regression/,
+    },
+    {
+      name: 'edge',
+      grep: /@edge/,
+    },
   ],
 
   /* Run your local dev server before starting the tests */

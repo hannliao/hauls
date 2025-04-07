@@ -4,15 +4,22 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  schedule:
+    - cron: '0 2 * * 1' # every Monday at 2 AM UTC
+
 jobs:
-  test:
-    timeout-minutes: 60
+  build:
+    name: Built
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
 
       - name: Install backend dependencies
         run: npm ci
@@ -22,6 +29,44 @@ jobs:
         run: npm ci
         working-directory: frontend
 
+      - name: Run unit tests
+        run: npm test
+        working-directory: frontend
+
+      - name: Built frontend
+        run: npm run build
+        working-directory: frontend
+
+      - name: Cache build artifacts
+        uses: actions/cache@v3
+        with:
+          path: |
+            frontend/dist
+            frontend/node_modules
+            backend/node_modules
+          key: ${{ runner.os }}-build-${{ github.sha }}
+
+  smoke:
+    name: Smoke Tests
+    needs: build
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Restore cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            frontend/dist
+            frontend/node_modules
+            backend/node_modules
+          key: ${{ runner.os }}-build-${{ github.sha }}
+
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
         working-directory: frontend
@@ -30,23 +75,61 @@ jobs:
         run: node app.js &
         working-directory: backend
 
-      - name: Run Playwright tests
+      - name: Run smoke tests
         run: |
-          npm run build
           npm run preview -- --port 5173 &
-          npx playwright test
+          npx playwright test --grep="@smoke"
         working-directory: frontend
         env:
           CI: true
 
-      - name: Debug test results
-        if: always()
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: smoke-test-report
+          path: frontend/playwright-report/
+          retention-days: 7
+
+  regression:
+    name: Regression Tests
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Restore cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            frontend/dist
+            frontend/node_modules
+            backend/node_modules
+          key: ${{ runner.os }}-build-${{ github.sha }}
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+        working-directory: frontend
+
+      - name: Start backend server
+        run: node app.js &
+        working-directory: backend
+
+      - name: Run regression tests
         run: |
-          ls -la frontend/playwright-report || echo "No playwright-report directory"
+          npm run preview -- --port 5173 &
+          npx playwright test --grep="@regression"
+        working-directory: frontend
+        env:
+          CI: true
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: playwright-report
+          name: smoke-test-report
           path: frontend/playwright-report/
-          retention-days: 30
+          retention-days: 7

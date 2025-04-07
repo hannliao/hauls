@@ -18,7 +18,7 @@ const ItemInput: React.FC<ItemInputProps> = ({
   }
   
   return (
-    <div className="flex items-center">
+    <li className="flex items-center">
       <button 
         type="button" 
         className={`border-1 hover:text-rose-400 hover:border-rose-400 rounded-full p-1 px-4 m-2 text-sm
@@ -95,7 +95,7 @@ const ItemInput: React.FC<ItemInputProps> = ({
           <img src="/icons/trash.svg" alt="delete" />
         </button>
       )}
-    </div>
+    </li>
   )
 }
 

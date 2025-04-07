@@ -221,24 +221,26 @@ const NewHaulForm = () => {
         
         <div className="my-4">
           <h3>Items</h3>
-          {/* list of items */}
-          {items.map((item, index) => (
+          <ul>
+            {/* list of items */}
+            {items.map((item, index) => (
+              <ItemInput
+                key={index}
+                item={item}
+                index={index}
+                onChange={handleItemChange}
+                onToggle={handleToggle}
+                onDelete={handleItemDelete}
+              />
+            ))}
+            {/* add new item */}
             <ItemInput
-              key={index}
-              item={item}
-              index={index}
+              item={newItem}
               onChange={handleItemChange}
               onToggle={handleToggle}
-              onDelete={handleItemDelete}
+              onAdd={handleItemAdd}
             />
-          ))}
-          {/* add new item */}
-          <ItemInput
-            item={newItem}
-            onChange={handleItemChange}
-            onToggle={handleToggle}
-            onAdd={handleItemAdd}
-          />
+          </ul>
         </div>
 
         <div className="flex flex-col">

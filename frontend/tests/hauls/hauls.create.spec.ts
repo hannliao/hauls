@@ -24,19 +24,18 @@ test.describe('@smoke Valid inputs', () => {
   });
 });
 
-// test.describe('Item inputs', () => {
-//   test('should delete item when delete button is clicked', async ({ page }) => {
+test.describe('Item inputs', () => {
+  test('@regression should delete item when delete button is clicked', async ({ page }) => {
+    await page.getByRole('textbox', { name: 'new item...' }).fill(haulForm.item);
+    await page.getByRole('textbox', { name: 'new item...' }).press('Enter');
 
-//   })
+    const firstItem = page.locator('input[name="name"]').first();
+    await expect(firstItem).toHaveValue(haulForm.item);
 
-//   test('should toggle recommended tag when clicked', ({ page }) => {
-
-//   })
-
-//   test('should not decrease quantity below 1', ({ page }) => {
-
-//   })
-// })
+    await page.getByRole('button', { name: 'delete' }).click();
+    await expect(firstItem).not.toHaveValue(haulForm.item);
+  })
+})
 
 // test.describe('Invalid inputs', () => {
 //   test('should require required fields to be filled', ({ page }) => {
@@ -46,4 +45,8 @@ test.describe('@smoke Valid inputs', () => {
 //   test('should handle no items', ({ page }) => {
 
 //   })
+
+//  test('should not decrease quantity below 1', ({ page }) => {
+
+//  })
 // })

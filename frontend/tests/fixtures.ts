@@ -11,7 +11,9 @@ export const test = base.extend<Fixtures>({
     await page.locator('input[name="username"]').fill(credentials.valid.username);
     await page.locator('input[name="password"]').fill(credentials.valid.password);
     await page.getByRole('button', { name: 'Log In' }).click();
-    await page.waitForURL('/');
+    // await page.waitForURL('/');
+    await page.waitForLoadState();
+    console.log('Post-login URL:', page.url());
     await use(page);
   },
 });

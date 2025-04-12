@@ -124,16 +124,10 @@ jobs:
 
       - name: Verify backend connectivity
         run: |
-          # Start backend
-          cd ../backend && node app.js &
           sleep 5
 
           # Check if frontend can reach backend
-          curl -v http://localhost:YOUR_BACKEND_PORT/health
-
-          # Test from within the frontend container
-          cd ../frontend
-          curl -v http://localhost:YOUR_BACKEND_PORT/health
+          curl -v http://localhost:3000/health
         working-directory: frontend
 
       - name: Run debug test

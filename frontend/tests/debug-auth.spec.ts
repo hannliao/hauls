@@ -1,5 +1,7 @@
 import { test } from '@playwright/test';
 
+test.use({ trace: 'on' });
+
 test('Debug auth flow', async ({ page }) => {
   console.log('Starting auth debug test');
   

@@ -131,7 +131,7 @@ jobs:
         working-directory: frontend
 
       - name: Run debug test
-        run: npx playwright test debug-auth.spec.ts --debug
+        run: npx playwright test debug-auth.spec.ts
         working-directory: frontend
 
       - name: Run regression tests

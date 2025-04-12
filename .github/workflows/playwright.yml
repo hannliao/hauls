@@ -7,6 +7,13 @@ on:
   schedule:
     - cron: '0 2 * * 1' # every Monday at 2 AM UTC
 
+env:
+  CI: true
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+  JWT_SECRET: ${{ secrets.JWT_SECRET }}
+  VITE_API_URL: ${{ secrets.VITE_API_URL }}
+
 jobs:
   build:
     name: Built

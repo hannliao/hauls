@@ -7,18 +7,18 @@ on:
   schedule:
     - cron: '0 2 * * 1' # every Monday at 2 AM UTC
 
-env:
-  CI: true
-  DATABASE_URL: ${{ secrets.DATABASE_URL }}
-  SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
-  JWT_SECRET: ${{ secrets.JWT_SECRET }}
-  VITE_API_URL: ${{ secrets.VITE_API_URL }}
-
 jobs:
   build:
     name: Built
     runs-on: ubuntu-latest
     timeout-minutes: 15
+
+    env:
+      CI: true
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      VITE_API_URL: ${{ secrets.VITE_API_URL }}
 
     steps:
       - uses: actions/checkout@v4
@@ -83,8 +83,6 @@ jobs:
           npm run preview -- --port 5173 &
           npx playwright test --grep="@smoke"
         working-directory: frontend
-        env:
-          CI: true
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
@@ -122,25 +120,11 @@ jobs:
         run: node app.js &
         working-directory: backend
 
-      - name: Verify backend connectivity
-        run: |
-          sleep 5
-
-          # Check if frontend can reach backend
-          curl -v http://localhost:3000/health
-        working-directory: frontend
-
-      - name: Run debug test
-        run: npx playwright test debug-auth.spec.ts
-        working-directory: frontend
-
       - name: Run regression tests
         run: |
           npm run preview -- --port 5173 &
           npx playwright test --grep="@regression"
         working-directory: frontend
-        env:
-          CI: true
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}

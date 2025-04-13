@@ -36,10 +36,6 @@ jobs:
         run: npm ci
         working-directory: frontend
 
-      - name: Built frontend
-        run: npm run build
-        working-directory: frontend
-
       - name: Cache build artifacts
         uses: actions/cache@v3
         with:
@@ -80,19 +76,8 @@ jobs:
         run: npx playwright install --with-deps
         working-directory: frontend
 
-      - name: Start backend server
-        run: node app.js &
-          echo "Starting backend..."
-          curl --retry 5 --retry-delay 2 --retry-connrefused http://localhost:3000/health
-        working-directory: backend
-
       - name: Run smoke tests
-        run: |
-          npm run preview -- --port 5173 &
-          echo "Starting frontend..."
-          npx wait-on http://localhost:5173
-          echo "Frontend server is ready"
-          npx playwright test --grep="@smoke"
+        run: npx playwright test --grep="@smoke"
         working-directory: frontend
 
       - uses: actions/upload-artifact@v4
@@ -133,19 +118,8 @@ jobs:
         run: npx playwright install --with-deps
         working-directory: frontend
 
-      - name: Start backend server
-        run: node app.js &
-          echo "Starting backend..."
-          curl --retry 5 --retry-delay 2 --retry-connrefused http://localhost:3000/health
-        working-directory: backend
-
       - name: Run regression tests
-        run: |
-          npm run preview -- --port 5173 &
-          echo "Starting frontend..."
-          npx wait-on http://localhost:5173
-          echo "Frontend server is ready"
-          npx playwright test --grep="@smoke"
+        run: npx playwright test --grep="@smoke"
         working-directory: frontend
 
       - uses: actions/upload-artifact@v4

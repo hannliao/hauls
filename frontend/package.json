@@ -7,11 +7,11 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview --port 5173 --host",
-    "start:servers": "concurrently \"node ../backend/app.js\" \"npm run dev\"",
+    "preview": "vite preview",
+    "start:servers": "concurrently \"node ../backend/app.js\" \"npm run preview\"",
     "test": "concurrently -k \"npm run start:servers\" \"npx playwright test --ui\"",
     "test:e2e": "playwright test",
-    "test:ci": "vite preview --port 5173 & playwright test",
+    "test:ci": "concurrently -k \"npm run start:servers\" \"playwright test\"",
     "codegen": "concurrently -k \"npm run start:servers\" \"npx playwright codegen http://localhost:5173\""
   },
   "dependencies": {

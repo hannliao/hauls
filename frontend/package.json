@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
+    "preview": "vite preview --port 5173 --host",
     "start:servers": "concurrently \"node ../backend/app.js\" \"npm run dev\"",
     "test": "concurrently -k \"npm run start:servers\" \"npx playwright test --ui\"",
     "test:e2e": "playwright test",

@@ -11,7 +11,7 @@ jobs:
   build:
     name: Built
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
 
     env:
       CI: true
@@ -54,6 +54,59 @@ jobs:
     needs: build
     if: github.event_name == 'push' || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CI: true
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      VITE_API_URL: ${{ secrets.VITE_API_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Restore cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            frontend/dist
+            frontend/node_modules
+            backend/node_modules
+          key: ${{ runner.os }}-build-${{ github.sha }}
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+        working-directory: frontend
+
+      - name: Start backend server
+        run: node app.js &
+          echo "Starting backend..."
+          curl --retry 5 --retry-delay 2 --retry-connrefused http://localhost:3000/health
+        working-directory: backend
+
+      - name: Run smoke tests
+        run: |
+          npm run preview -- --port 5173 &
+          echo "Starting frontend..."
+          npx wait-on http://localhost:5173
+          echo "Frontend server is ready"
+          npx playwright test --grep="@smoke"
+        working-directory: frontend
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: smoke-test-report
+          path: frontend/playwright-report/
+          retention-days: 7
+
+  regression:
+    name: Regression Tests
+    needs: smoke
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
       CI: true
@@ -83,65 +136,6 @@ jobs:
       - name: Start backend server
         run: node app.js &
           echo "Starting backend..."
-          sleep 5
-          echo "Checking if backend is available..."
-          curl --retry 5 --retry-delay 2 --retry-connrefused http://localhost:3000/health
-        working-directory: backend
-
-      - name: Run smoke tests
-        run: |
-          npm run preview -- --port 5173 &
-          echo "Starting frontend..."
-          sleep 5
-          curl -s --retry 5 --retry-delay 2 http://localhost:5173 > /dev/null
-          npx wait-on http://localhost:5173
-          echo "Frontend server is ready"
-          npx playwright test --grep="@smoke"
-        working-directory: frontend
-
-      - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
-        with:
-          name: smoke-test-report
-          path: frontend/playwright-report/
-          retention-days: 7
-
-  regression:
-    name: Regression Tests
-    needs: smoke
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    env:
-      CI: true
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      VITE_API_URL: ${{ secrets.VITE_API_URL }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
-
-      - name: Restore cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            frontend/dist
-            frontend/node_modules
-            backend/node_modules
-          key: ${{ runner.os }}-build-${{ github.sha }}
-
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
-        working-directory: frontend
-
-      - name: Start backend server
-        run: node app.js &
-          echo "Starting backend..."
-          sleep 5
-          echo "Checking if backend is available..."
           curl --retry 5 --retry-delay 2 --retry-connrefused http://localhost:3000/health
         working-directory: backend
 
@@ -149,8 +143,6 @@ jobs:
         run: |
           npm run preview -- --port 5173 &
           echo "Starting frontend..."
-          sleep 5
-          curl -s --retry 5 --retry-delay 2 http://localhost:5173 > /dev/null
           npx wait-on http://localhost:5173
           echo "Frontend server is ready"
           npx playwright test --grep="@smoke"
